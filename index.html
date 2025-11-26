@@ -169,9 +169,12 @@
             border-radius: 8px;
             padding: 8px 12px;
             z-index: 150;
+        }
+        #hud-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 6px;
         }
         #hud-level {
             color: #fbbf24;
@@ -184,8 +187,9 @@
         }
         #hud-stats {
             display: flex;
-            gap: 12px;
-            font-size: 11px;
+            gap: 8px;
+            font-size: 10px;
+            flex-wrap: wrap;
         }
         .hud-stat {
             color: #fff;
@@ -196,6 +200,12 @@
         .stat-str { color: #ef4444; }
         .stat-vit { color: #22c55e; }
         .stat-def { color: #3b82f6; }
+        .stat-mag { color: #c084fc; }
+        #hud-ley {
+            color: #67e8f9;
+            font-size: 11px;
+            margin-left: auto;
+        }
 
         #player {
             position: absolute;
@@ -300,7 +310,7 @@
         /* Scene indicator */
         #scene-label {
             position: absolute;
-            top: 70px;
+            top: 85px;
             left: 50%;
             transform: translateX(-50%);
             color: rgba(255,255,255,0.5);
@@ -370,30 +380,30 @@
             font-weight: bold;
         }
 
-        /* Health Bars */
-        .health-bar-container {
+        /* Health/Ley Bars */
+        .bar-container {
             position: absolute;
             width: 80%;
             left: 10%;
-            height: 24px;
+            height: 20px;
             background: #333;
-            border-radius: 12px;
+            border-radius: 10px;
             border: 2px solid #555;
             overflow: hidden;
         }
-        .health-bar {
+        .bar-fill {
             height: 100%;
             transition: width 0.3s ease;
-            border-radius: 10px;
+            border-radius: 8px;
         }
-        .health-bar-label {
+        .bar-label {
             position: absolute;
             width: 100%;
             text-align: center;
             color: #fff;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: bold;
-            line-height: 24px;
+            line-height: 20px;
             text-shadow: 1px 1px 2px #000;
         }
         #enemy-health-container {
@@ -403,10 +413,16 @@
             background: linear-gradient(to right, #ef4444, #f87171);
         }
         #player-health-container {
-            bottom: 180px;
+            bottom: 200px;
         }
         #player-health {
             background: linear-gradient(to right, #22c55e, #4ade80);
+        }
+        #player-ley-container {
+            bottom: 175px;
+        }
+        #player-ley {
+            background: linear-gradient(to right, #06b6d4, #67e8f9);
         }
 
         /* Combat UI */
@@ -418,31 +434,39 @@
             height: 160px;
             background: rgba(0, 0, 0, 0.9);
             border-top: 3px solid #4a9fff;
-            padding: 15px;
+            padding: 10px 15px;
         }
-        #player-stats {
+        #player-stats-combat {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         #player-name-combat {
             color: #4a9fff;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: bold;
+        }
+        #player-resources {
+            display: flex;
+            gap: 15px;
+            font-size: 12px;
         }
         #player-hp-text {
             color: #22c55e;
-            font-size: 14px;
+        }
+        #player-ley-text {
+            color: #67e8f9;
         }
         #combat-actions {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             justify-content: center;
+            flex-wrap: wrap;
         }
         .combat-btn {
-            padding: 15px 30px;
-            font-size: 18px;
+            padding: 12px 20px;
+            font-size: 16px;
             font-weight: bold;
             border: none;
             border-radius: 8px;
@@ -453,7 +477,7 @@
             transform: scale(0.95);
         }
         .combat-btn:disabled {
-            opacity: 0.5;
+            opacity: 0.4;
         }
         #attack-btn {
             background: linear-gradient(to bottom, #ef4444, #b91c1c);
@@ -465,6 +489,20 @@
             color: #fff;
             border: 2px solid #1e40af;
         }
+        #spell-btn {
+            background: linear-gradient(to bottom, #06b6d4, #0891b2);
+            color: #fff;
+            border: 2px solid #0e7490;
+        }
+        #spell-btn.no-ley {
+            background: linear-gradient(to bottom, #4b5563, #374151);
+            border-color: #1f2937;
+        }
+        .spell-cost {
+            font-size: 10px;
+            display: block;
+            opacity: 0.8;
+        }
 
         /* Combat Log */
         #combat-log {
@@ -474,7 +512,7 @@
             right: 10%;
             text-align: center;
             color: #fbbf24;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: bold;
             text-shadow: 2px 2px 4px #000;
             min-height: 24px;
@@ -487,6 +525,15 @@
         @keyframes damageFlash {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.3; }
+        }
+
+        /* Magic Flash */
+        .magic-flash {
+            animation: magicFlash 0.5s ease;
+        }
+        @keyframes magicFlash {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(2) hue-rotate(180deg); }
         }
 
         /* Victory/Defeat overlay */
@@ -555,12 +602,12 @@
         }
         #levelup-stats {
             color: #fff;
-            font-size: 16px;
+            font-size: 14px;
             text-align: center;
             margin-bottom: 20px;
         }
         #levelup-stats div {
-            margin: 8px 0;
+            margin: 6px 0;
         }
         #levelup-btn {
             padding: 15px 40px;
@@ -609,14 +656,18 @@
         <div id="exploration-scene">
             <div id="world"></div>
             <div id="player-hud">
-                <div>
-                    <div id="hud-level">Lv. 1</div>
-                    <div id="hud-xp">XP: 0 / 30</div>
+                <div id="hud-top">
+                    <div>
+                        <div id="hud-level">Lv. 1</div>
+                        <div id="hud-xp">XP: 0 / 30</div>
+                    </div>
+                    <div id="hud-ley">Ley: 50 / 50</div>
                 </div>
                 <div id="hud-stats">
                     <div class="hud-stat">STR: <span class="stat-str" id="hud-str">5</span></div>
                     <div class="hud-stat">VIT: <span class="stat-vit" id="hud-vit">5</span></div>
                     <div class="hud-stat">DEF: <span class="stat-def" id="hud-def">5</span></div>
+                    <div class="hud-stat">MAG: <span class="stat-mag" id="hud-mag">5</span></div>
                 </div>
             </div>
             <div id="player">
@@ -647,22 +698,30 @@
                     <div class="enemy-mouth"></div>
                 </div>
             </div>
-            <div id="enemy-health-container" class="health-bar-container">
-                <div id="enemy-health" class="health-bar" style="width: 100%"></div>
-                <div id="enemy-health-label" class="health-bar-label">50 / 50</div>
+            <div id="enemy-health-container" class="bar-container">
+                <div id="enemy-health" class="bar-fill" style="width: 100%"></div>
+                <div id="enemy-health-label" class="bar-label">50 / 50</div>
             </div>
             <div id="combat-log"></div>
-            <div id="player-health-container" class="health-bar-container">
-                <div id="player-health" class="health-bar" style="width: 100%"></div>
-                <div id="player-health-label" class="health-bar-label">100 / 100</div>
+            <div id="player-health-container" class="bar-container">
+                <div id="player-health" class="bar-fill" style="width: 100%"></div>
+                <div id="player-health-label" class="bar-label">100 / 100</div>
+            </div>
+            <div id="player-ley-container" class="bar-container">
+                <div id="player-ley" class="bar-fill" style="width: 100%"></div>
+                <div id="player-ley-label" class="bar-label">50 / 50</div>
             </div>
             <div id="combat-ui">
-                <div id="player-stats">
+                <div id="player-stats-combat">
                     <div id="player-name-combat">Ley</div>
-                    <div id="player-hp-text">HP: 100 / 100</div>
+                    <div id="player-resources">
+                        <div id="player-hp-text">HP: 100/100</div>
+                        <div id="player-ley-text">Ley: 50/50</div>
+                    </div>
                 </div>
                 <div id="combat-actions">
                     <button id="attack-btn" class="combat-btn">Attack</button>
+                    <button id="spell-btn" class="combat-btn">Spark<span class="spell-cost">15 Ley</span></button>
                     <button id="defend-btn" class="combat-btn">Defend</button>
                 </div>
             </div>
@@ -681,7 +740,9 @@
                 <div>STR: <span id="lu-str">5 → 6</span></div>
                 <div>VIT: <span id="lu-vit">5 → 6</span></div>
                 <div>DEF: <span id="lu-def">5 → 6</span></div>
+                <div>MAG: <span id="lu-mag">5 → 6</span></div>
                 <div>Max HP: <span id="lu-hp">100 → 110</span></div>
+                <div>Max Ley: <span id="lu-ley">50 → 60</span></div>
             </div>
             <button id="levelup-btn">Awesome!</button>
         </div>
@@ -697,6 +758,9 @@
             bat: { name: 'Shadow Bat', hp: 35, attack: 15, xp: 20, color: 'bat' }
         };
 
+        // Spell cost
+        const SPELL_COST = 15;
+
         // Game State
         const game = {
             currentScene: 'dialog',
@@ -710,10 +774,13 @@
                 xp: 0,
                 xpToLevel: 30,
                 str: 5,  // Affects attack damage
-                vit: 5,  // Affects max HP
+                vit: 5,  // Affects max HP and max Ley
                 def: 5,  // Affects damage reduction
+                mag: 5,  // Affects spell damage
                 hp: 100,
                 maxHp: 100,
+                ley: 50,    // Current ley (mana) - NEVER replenishes
+                maxLey: 50, // Max ley
                 defending: false
             },
             enemies: [],
@@ -735,14 +802,22 @@
         function calcDefense() {
             return game.player.def * 2;
         }
+        function calcMaxLey() {
+            return 30 + (game.player.vit * 5);
+        }
+        function calcSpellDamage() {
+            return 15 + (game.player.mag * 4);
+        }
 
         // Dialog Scripts
         const introDialog = [
             { speaker: 'Ley', text: 'Hello there! Welcome to our world.' },
             { speaker: 'Mira', text: 'Oh, a new visitor! How exciting!' },
             { speaker: 'Ley', text: 'There are monsters nearby. Defeat them to gain experience!' },
-            { speaker: 'Mira', text: 'Your stats are STR, VIT, and DEF. They increase when you level up!' },
-            { speaker: 'Ley', text: 'STR boosts attack, VIT boosts HP, DEF reduces damage.' },
+            { speaker: 'Mira', text: 'You have 4 stats: STR, VIT, DEF, and MAG.' },
+            { speaker: 'Ley', text: 'STR boosts attack, VIT boosts HP and Ley, DEF reduces damage.' },
+            { speaker: 'Mira', text: 'MAG increases your spell power. Use "Spark" in combat!' },
+            { speaker: 'Ley', text: 'But be careful... Ley energy never replenishes. Use it wisely!' },
             { speaker: 'Mira', text: 'Good luck out there! Tap to begin!' }
         ];
 
@@ -771,6 +846,8 @@
         const hudStr = document.getElementById('hud-str');
         const hudVit = document.getElementById('hud-vit');
         const hudDef = document.getElementById('hud-def');
+        const hudMag = document.getElementById('hud-mag');
+        const hudLey = document.getElementById('hud-ley');
 
         // Combat elements
         const combatEnemy = document.getElementById('combat-enemy');
@@ -779,9 +856,13 @@
         const enemyHealthLabel = document.getElementById('enemy-health-label');
         const playerHealth = document.getElementById('player-health');
         const playerHealthLabel = document.getElementById('player-health-label');
+        const playerLeyBar = document.getElementById('player-ley');
+        const playerLeyLabel = document.getElementById('player-ley-label');
         const playerHpText = document.getElementById('player-hp-text');
+        const playerLeyText = document.getElementById('player-ley-text');
         const combatLog = document.getElementById('combat-log');
         const attackBtn = document.getElementById('attack-btn');
+        const spellBtn = document.getElementById('spell-btn');
         const defendBtn = document.getElementById('defend-btn');
         const combatResult = document.getElementById('combat-result');
         const resultText = document.getElementById('result-text');
@@ -799,6 +880,8 @@
             hudStr.textContent = game.player.str;
             hudVit.textContent = game.player.vit;
             hudDef.textContent = game.player.def;
+            hudMag.textContent = game.player.mag;
+            hudLey.textContent = `Ley: ${game.player.ley} / ${game.player.maxLey}`;
         }
 
         // Initialize enemies
@@ -977,7 +1060,8 @@
             game.combatTurn = 'player';
             game.player.defending = false;
 
-            updateHealthBars();
+            updateCombatBars();
+            updateSpellButton();
             combatLog.textContent = `A wild ${game.currentEnemy.name} appears!`;
             combatResult.style.display = 'none';
 
@@ -985,23 +1069,49 @@
             defendBtn.disabled = false;
         }
 
-        function updateHealthBars() {
+        function updateCombatBars() {
             const enemyPercent = (game.currentEnemy.currentHp / game.currentEnemy.hp) * 100;
-            const playerPercent = (game.player.hp / game.player.maxHp) * 100;
+            const playerHpPercent = (game.player.hp / game.player.maxHp) * 100;
+            const playerLeyPercent = (game.player.ley / game.player.maxLey) * 100;
 
             enemyHealth.style.width = enemyPercent + '%';
             enemyHealthLabel.textContent = `${game.currentEnemy.currentHp} / ${game.currentEnemy.hp}`;
 
-            playerHealth.style.width = playerPercent + '%';
+            playerHealth.style.width = playerHpPercent + '%';
             playerHealthLabel.textContent = `${game.player.hp} / ${game.player.maxHp}`;
-            playerHpText.textContent = `HP: ${game.player.hp} / ${game.player.maxHp}`;
+            playerHpText.textContent = `HP: ${game.player.hp}/${game.player.maxHp}`;
+
+            playerLeyBar.style.width = playerLeyPercent + '%';
+            playerLeyLabel.textContent = `${game.player.ley} / ${game.player.maxLey}`;
+            playerLeyText.textContent = `Ley: ${game.player.ley}/${game.player.maxLey}`;
+        }
+
+        function updateSpellButton() {
+            if (game.player.ley < SPELL_COST) {
+                spellBtn.classList.add('no-ley');
+                spellBtn.disabled = true;
+            } else {
+                spellBtn.classList.remove('no-ley');
+                spellBtn.disabled = false;
+            }
+        }
+
+        function disableAllActions() {
+            attackBtn.disabled = true;
+            spellBtn.disabled = true;
+            defendBtn.disabled = true;
+        }
+
+        function enableActions() {
+            attackBtn.disabled = false;
+            defendBtn.disabled = false;
+            updateSpellButton();
         }
 
         function playerAttack() {
             if (!game.combatActive || game.combatTurn !== 'player') return;
 
-            attackBtn.disabled = true;
-            defendBtn.disabled = true;
+            disableAllActions();
             game.player.defending = false;
 
             // Calculate damage based on STR
@@ -1013,7 +1123,35 @@
             combatEnemy.classList.add('damage-flash');
             setTimeout(() => combatEnemy.classList.remove('damage-flash'), 300);
 
-            updateHealthBars();
+            updateCombatBars();
+
+            if (game.currentEnemy.currentHp <= 0) {
+                endCombat(true);
+            } else {
+                setTimeout(enemyTurn, 1000);
+            }
+        }
+
+        function playerSpell() {
+            if (!game.combatActive || game.combatTurn !== 'player') return;
+            if (game.player.ley < SPELL_COST) return;
+
+            disableAllActions();
+            game.player.defending = false;
+
+            // Spend Ley (never comes back!)
+            game.player.ley -= SPELL_COST;
+
+            // Calculate spell damage based on MAG
+            const baseDamage = calcSpellDamage();
+            const damage = Math.floor(baseDamage + Math.random() * 8);
+            game.currentEnemy.currentHp = Math.max(0, game.currentEnemy.currentHp - damage);
+
+            combatLog.textContent = `Ley casts Spark for ${damage} magic damage!`;
+            combatEnemy.classList.add('magic-flash');
+            setTimeout(() => combatEnemy.classList.remove('magic-flash'), 500);
+
+            updateCombatBars();
 
             if (game.currentEnemy.currentHp <= 0) {
                 endCombat(true);
@@ -1025,8 +1163,7 @@
         function playerDefend() {
             if (!game.combatActive || game.combatTurn !== 'player') return;
 
-            attackBtn.disabled = true;
-            defendBtn.disabled = true;
+            disableAllActions();
             game.player.defending = true;
 
             combatLog.textContent = 'Ley takes a defensive stance!';
@@ -1053,7 +1190,7 @@
             playerEl.classList.add('damage-flash');
             setTimeout(() => playerEl.classList.remove('damage-flash'), 300);
 
-            updateHealthBars();
+            updateCombatBars();
 
             if (game.player.hp <= 0) {
                 endCombat(false);
@@ -1061,8 +1198,7 @@
                 setTimeout(() => {
                     game.combatTurn = 'player';
                     game.player.defending = false;
-                    attackBtn.disabled = false;
-                    defendBtn.disabled = false;
+                    enableActions();
                     combatLog.textContent = 'Your turn!';
                 }, 1000);
             }
@@ -1070,8 +1206,7 @@
 
         function endCombat(victory) {
             game.combatActive = false;
-            attackBtn.disabled = true;
-            defendBtn.disabled = true;
+            disableAllActions();
 
             setTimeout(() => {
                 combatResult.style.display = 'flex';
@@ -1093,7 +1228,7 @@
                     resultText.textContent = 'DEFEAT';
                     resultText.className = 'defeat';
                     xpGainEl.textContent = '';
-                    // Restore player HP for retry
+                    // Restore player HP for retry (but NOT Ley!)
                     game.player.hp = game.player.maxHp;
                 }
             }, 500);
@@ -1103,7 +1238,9 @@
             const oldStr = game.player.str;
             const oldVit = game.player.vit;
             const oldDef = game.player.def;
+            const oldMag = game.player.mag;
             const oldMaxHp = game.player.maxHp;
+            const oldMaxLey = game.player.maxLey;
 
             game.player.xp -= game.player.xpToLevel;
             game.player.level++;
@@ -1113,17 +1250,22 @@
             game.player.str += 2;
             game.player.vit += 2;
             game.player.def += 1;
+            game.player.mag += 2;
 
-            // Recalculate max HP and heal
+            // Recalculate max HP and heal (but NOT Ley - it never replenishes!)
             game.player.maxHp = calcMaxHp();
             game.player.hp = game.player.maxHp;
+            game.player.maxLey = calcMaxLey();
+            // Note: current ley stays the same, only max increases
 
             // Update level up display
             document.getElementById('lu-level').textContent = game.player.level;
             document.getElementById('lu-str').textContent = `${oldStr} → ${game.player.str}`;
             document.getElementById('lu-vit').textContent = `${oldVit} → ${game.player.vit}`;
             document.getElementById('lu-def').textContent = `${oldDef} → ${game.player.def}`;
+            document.getElementById('lu-mag').textContent = `${oldMag} → ${game.player.mag}`;
             document.getElementById('lu-hp').textContent = `${oldMaxHp} → ${game.player.maxHp}`;
+            document.getElementById('lu-ley').textContent = `${oldMaxLey} → ${game.player.maxLey}`;
 
             levelupOverlay.classList.add('active');
         }
@@ -1241,6 +1383,8 @@
             initEnemies();
             game.player.maxHp = calcMaxHp();
             game.player.hp = game.player.maxHp;
+            game.player.maxLey = calcMaxLey();
+            game.player.ley = game.player.maxLey; // Start with full Ley
 
             sceneLabel.textContent = 'Dialog Scene';
 
@@ -1267,6 +1411,9 @@
             // Combat buttons
             attackBtn.addEventListener('click', playerAttack);
             attackBtn.addEventListener('touchend', (e) => { e.preventDefault(); playerAttack(); });
+
+            spellBtn.addEventListener('click', playerSpell);
+            spellBtn.addEventListener('touchend', (e) => { e.preventDefault(); playerSpell(); });
 
             defendBtn.addEventListener('click', playerDefend);
             defendBtn.addEventListener('touchend', (e) => { e.preventDefault(); playerDefend(); });
