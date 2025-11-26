@@ -866,3 +866,455 @@ WE REMEMBER WHAT YOU PROMISED.
 -----
 
 *End Part 3*
+
+---
+
+## Part 4: Act 3 + Epilogue
+
+-----
+
+# ACT 3: The Fraying Thread
+
+**Runtime: ~15-20 minutes**
+
+-----
+
+## Setting: The Heart
+
+*Inside the Awakened Node*
+
+The Node's interior exists outside normal space. Memories manifest as physical terrain—fragments of Silas's past lives, scattered like broken mirrors. The party walks through moments that haven't happened yet. Through deaths that already occurred.
+
+The Assemblage follows. It can't be stopped. Only delayed.
+
+-----
+
+## Scene 1: The Architect's Memory
+
+*Party steps through the Node's threshold. Reality ripples. They stand in a different place—a workshop, centuries old, tools gleaming.*
+
+*Silas—different body, same grey eyes—stands before a young woman. Human. Vital. Alive.*
+
+**PAST SILAS:** The Loom is broken. The Engineer knows. It's been *eating* souls, not recycling them. Feeding on consciousness to maintain the Veinwork.
+
+**PAST WOMAN:** (Echo's original body—dark hair, sharp features, burning intensity) Then we stop it. We build our own Loom. One that doesn't consume.
+
+**PAST SILAS:** The Veinkeepers will never allow—
+
+**PAST WOMAN:** The Veinkeepers serve a machine that eats people. I don't care what they allow.
+
+*She takes his hands. Her grip is fierce.*
+
+**PAST WOMAN:** We build the door. We walk through. We make the Engineer *see*.
+
+*Memory dissolves. Workshop fragments into light.*
+
+**SILAS:** I remember her now. Not Echo. Before. When she was—
+
+**ECHO:** Elara. My name was Elara.
+
+**SILAS:** Why didn't you tell me?
+
+**ECHO:** Would you have believed me? Or would it have been one more ghost, one more bleedthrough you couldn't trust?
+
+**SILAS:** I…
+
+**ECHO:** You trusted me because I earned it. Not because I claimed a past you don't remember.
+
+*The ground shakes. Distant crash.*
+
+**VESK:** It's still coming.
+
+**ECHO:** Then we keep moving.
+
+-----
+
+## Scene 2: Vesk's Fire
+
+*Memory shifts. Party walks through flame.*
+
+*A village burns. Vesk—younger, in pristine Veinkeeper uniform—watches. His face is sick. His hands shake.*
+
+**PAST VESK:** This is wrong. They're not *doing* anything.
+
+**PAST COMMANDER:** (older, scarred, certain) They're Loom-Blind. Aberrations. The Engineer has no use for souls it can't process.
+
+**PAST VESK:** They're *people*.
+
+**PAST COMMANDER:** They're fuel that won't burn. Useless. This is mercy.
+
+*Past Vesk's hand moves to his weapon.*
+
+**PAST VESK:** No. This is murder.
+
+*Memory freezes. Fire suspended mid-flicker.*
+
+**PRESENT VESK:** (to the party, not looking at them) I killed him. Didn't save a single one of them, but I killed him.
+
+**SILAS:** Vesk—
+
+**VESK:** (turning away) Keep moving. We're being followed.
+
+**CORRA:** (quietly) You tried.
+
+**VESK:** Trying doesn't bring back the dead.
+
+**ECHO:** No. But it's why you're here. Why you're still fighting. That has to count.
+
+*Vesk doesn't respond. But he doesn't argue.*
+
+-----
+
+## Scene 3: Corra's Daughter
+
+*Final memory before the core. The Node's light softens. A small room. Worn furniture. A child in bed—thin, pale, eyes too bright.*
+
+*Corra—human, living, young—holds the child's hand.*
+
+**MIRA:** Mama, don't cry.
+
+**PAST CORRA:** I'm not, sweetheart. I'm not crying.
+
+**MIRA:** (weak smile) Liar.
+
+*She presses a blue ribbon into Corra's hand.*
+
+**MIRA:** Keep this, okay? So you remember.
+
+**PAST CORRA:** Remember what?
+
+**MIRA:** That I loved you. Even when you forget everything else… remember that someone loved you.
+
+*Memory fades. Light dims.*
+
+*Present Corra stands frozen. Echo takes her wooden hand.*
+
+**ECHO:** She entered the cycle. She's been reborn. I don't know where, but she's *out there*, Corra. Living a new life.
+
+**CORRA:** She won't remember me.
+
+**ECHO:** No. But maybe that's okay. Maybe loving someone means letting them move on.
+
+*Corra's grip tightens on the ribbon.*
+
+**CORRA:** Mira.
+
+*Just the name. Enough.*
+
+-----
+
+## Scene 4: The Assemblage Speaks
+
+*Party reaches threshold of the Node's core. The Assemblage crashes through behind them—too fast, too close.*
+
+**ASSEMBLAGE:** (nineteen voices, overlapping, discordant)
+
+—promised to free us—
+
+—we waited for so long—
+
+—you built this place and then you DIED—
+
+—left us Fraying—
+
+—left us screaming—
+
+—IT SHOULD HURT WHEN WE SCREAM—
+
+**SILAS:** I know. I know I failed you. I'm sorry.
+
+**ASSEMBLAGE:** SORRY DOESN'T—
+
+**SILAS:** But I'm here now. And I remember enough. The third option—the door to the Engineer—it's not about breaking the system. It's about *showing* the Engineer what it's doing. It processes souls without understanding them. If we can make it *understand*—
+
+**ASSEMBLAGE:** THE ENGINEER DOESN'T CARE.
+
+**ECHO:** Maybe not. But we do. And that has to count for something.
+
+*The Assemblage's many faces contort. Some weep. Some rage. Some just stare.*
+
+**ASSEMBLAGE:** (single voice, cutting through—young, lost) …you really think it can be fixed?
+
+**SILAS:** I have to believe it can. Seventeen lives, and I've never stopped believing that.
+
+**ASSEMBLAGE:** (all voices) THEN WHY SHOULD WE LET YOU TRY? WHY SHOULD WE TRUST THE ARCHITECT WHO ABANDONED US?
+
+**SILAS:** Because you're still here. Still fighting. Still holding on. That means some part of you believes too.
+
+*Beat. The Assemblage trembles—internal conflict.*
+
+**ASSEMBLAGE:** (nineteen voices, fragmented)
+
+—kill them—
+
+—let them through—
+
+—break everything—
+
+—please, just let it end—
+
+—THE DOOR MUST NOT OPEN—
+
+—the door is our only hope—
+
+**ASSEMBLAGE:** (roaring, unified) WE CANNOT AGREE. SO WE WILL LET COMBAT DECIDE.
+
+-----
+
+## Final Boss: The Assemblage (Fragment)
+
+**[BOSS BATTLE: The Assemblage (Fragment)]**
+
+**Behavior Pattern:**
+
+- "Nineteen Voices" — Random element attack, hits all party
+- "It Should Hurt" — Massive single target damage
+- "When We Scream" — Drains LP from party
+- At 50% HP: Gains "Resonance Shield" — Must be hit by multiple elements to break
+- "The Thread That Binds" — Revives one fallen party member as temporary enemy
+
+-----
+
+### Mid-Battle Dialogue
+
+**At 75% HP:**
+
+**ASSEMBLAGE:** (young voice breaking through) We didn't want this—we didn't CHOOSE this—
+
+**ECHO:** I know. None of us chose.
+
+-----
+
+**At 50% HP (Phase 2):**
+
+**ASSEMBLAGE:** (barrier forming) YOU CAN'T BREAK WHAT'S ALREADY BROKEN.
+
+**SILAS:** We're not trying to break you. We're trying to set you free.
+
+-----
+
+**At 25% HP:**
+
+**ASSEMBLAGE:** (voices weakening, separating)
+
+…farmer…
+
+…had a son…
+
+…so tired…
+
+**CORRA:** Hold on. Just a little longer.
+
+-----
+
+## Post-Boss: The Nineteen Voices
+
+*The Assemblage falls. Its form dissolves. Nineteen voices separate into individual whispers.*
+
+**VOICE 1:** …I was a farmer…
+
+**VOICE 2:** …I had a son…
+
+**VOICE 3:** …I'm so tired…
+
+**VOICE 4:** …is it over…?
+
+*One by one, the souls begin to drift upward. Toward the Node's core.*
+
+**SILAS:** The door. It's opening.
+
+*The Node pulses—not black anymore, but white. Pure. A threshold.*
+
+**CORRA:** What do we do?
+
+**ECHO:** We walk through. We show the Engineer what it's been doing. All the pain. All the Fraying. All the souls it's consumed without understanding.
+
+**VESK:** Will it listen?
+
+**ECHO:** I don't know. But I've spent two hundred years holding onto this thread. I have to believe it matters.
+
+*She looks at the party. At Silas.*
+
+**ECHO:** I won't ask you to come with me. This was always my door to open.
+
+**SILAS:** I built it with you. I'm not letting you walk through alone.
+
+**CORRA:** We've come this far.
+
+**VESK:** (shouldering his hammer) Always wanted to punch a god.
+
+*Echo laughs—the first genuine laugh she's made all game.*
+
+**ECHO:** That's not quite what we're doing.
+
+**VESK:** Let me have this.
+
+-----
+
+## Final Choice
+
+**[PLAYER CHOICE]**
+
+> **[ENTER THE DOOR — TOGETHER]**
+>
+> - Party steps through as one
+> - Leads to Ending A
+
+> **[STAY BEHIND]**
+>
+> - Silas enters alone, ensuring others' safety
+> - Leads to Ending B
+
+-----
+
+# EPILOGUE
+
+**Runtime: ~2 minutes**
+
+-----
+
+## Ending A: Together
+
+**[IF PARTY ENTERS TOGETHER]**
+
+*Fade to white. Text appears over light:*
+
+> *They walked into the light together.*
+>
+> *The Engineer listened.*
+>
+> *It didn't understand, at first—it had never been asked to understand before. But they showed it. Every memory. Every loss. Every soul that had screamed into the void while the system processed them like data.*
+>
+> *Silas showed it seventeen lives of trying.*
+>
+> *Corra showed it a daughter's last gift.*
+>
+> *Vesk showed it a village that burned for nothing.*
+>
+> *Echo showed it two hundred years of holding on.*
+>
+> *The Loom began to change.*
+>
+> *It would take years. Decades. Maybe centuries. But the Fraying slowed. The cycle softened. Souls began to pass through whole instead of being consumed.*
+>
+> *And somewhere, in a village at the edge of the Veinwork, a child named Mira woke from a dream about a woman with a blue ribbon, and smiled for reasons she couldn't explain.*
+
+**[FADE OUT]**
+
+-----
+
+## Ending B: Alone
+
+**[IF SILAS ENTERS ALONE]**
+
+*Silas steps toward the light. Turns back.*
+
+**SILAS:** Keep each other safe. And if this works—if the Loom changes—
+
+**ECHO:** We'll know.
+
+**SILAS:** Tell them about the third option. Tell everyone.
+
+*He walks into the light.*
+
+*Fade to white. Text appears:*
+
+> *Silas walked into the light alone.*
+>
+> *The others waited. Hours. Days. They lost track.*
+>
+> *When the Node finally dimmed, Silas didn't return. But the Veinwork… quieted. The Hum softened. Across Ashveld, Konstruks reported something strange: for the first time in memory, the voices in their heads weren't screaming.*
+>
+> *Echo found a message carved into the Node's surface. Silas's handwriting—but older. Steadier.*
+>
+> *"Keep holding the thread. I'm fixing it from the inside."*
+>
+> *She traced the words with porcelain fingers.*
+>
+> *And she waited.*
+
+**[FADE OUT]**
+
+-----
+
+## Post-Credits Scene (Both Endings)
+
+*Black screen. Single line of text:*
+
+> *The Thread continues…*
+
+*Brief flash: The Assemblage's remaining fragments drifting through the Veinwork. Free, but not gone. Their voices whisper:*
+
+**NINETEEN VOICES:** (unified, peaceful)
+
+Thank you.
+
+**[END]**
+
+-----
+
+## Act 3 Encounters Summary
+
+|Encounter                |Type      |Location |
+|-------------------------|----------|---------|
+|The Assemblage (Fragment)|Final Boss|Node Core|
+
+**Note:** Act 3 is primarily narrative with a single climactic boss battle. The memories serve as emotional buildup rather than combat encounters.
+
+-----
+
+## Act 3 Memory Sequence Summary
+
+|Memory                  |Character Focus|Reveals                                             |
+|------------------------|---------------|----------------------------------------------------|
+|The Architect's Workshop|Silas, Echo    |Their shared past; the plan's origin; Echo was Elara|
+|The Burning Village     |Vesk           |His breaking point; why he deserted; his guilt      |
+|Mira's Room             |Corra          |Her daughter's death; the ribbon's true meaning     |
+
+-----
+
+## Final Choice Impact Summary
+
+|Choice        |Tone                    |Implication                                        |
+|--------------|------------------------|---------------------------------------------------|
+|Enter Together|Hopeful, unified        |Change happens because they all contributed        |
+|Silas Alone   |Bittersweet, sacrificial|One person bears the burden so others don't have to|
+
+-----
+
+## Full Campaign Choices Summary
+
+|Act|Choice           |Options                     |
+|---|-----------------|----------------------------|
+|1  |The Frayed Souls |Guide Souls / Move On       |
+|1  |Veinkeeper Patrol|Ambush / Follow             |
+|3  |The Door         |Enter Together / Stay Behind|
+
+-----
+
+## Character Arc Resolutions
+
+**Silas:** Accepts his seventeen lives weren't wasted—they led to this moment. Either walks into the light with friends or alone, but finally completes what he started centuries ago.
+
+**Corra:** Learns her daughter's name, processes her grief, and discovers that love persists even when memory fades. The ribbon transforms from a painful reminder into a connection.
+
+**Vesk:** Confronts his past without flinching. Chooses to fight alongside Konstruks he once dismissed, proving his redemption through action, not words.
+
+**Echo:** Two hundred years of holding the thread finally pays off. Whether she walks through the door or watches Silas go, she's fulfilled her purpose. Can finally let go.
+
+-----
+
+*End Part 4*
+
+-----
+
+# FULL CAMPAIGN DOCUMENT COMPLETE
+
+**Parts Overview:**
+
+- **Part 1:** Character & World Bible (characters, enemies, items, terminology)
+- **Part 2:** Prologue + Act 1 (tutorial, Hollow Vein, Warden boss, Echo introduction)
+- **Part 3:** Act 2 (Echo joins, Corra's ribbon, Node awakening, Assemblage arrival)
+- **Part 4:** Act 3 + Epilogue (memory sequence, final boss, endings)
+
+**Estimated Total Runtime:** 55-65 minutes
