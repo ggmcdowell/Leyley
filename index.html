@@ -38,6 +38,10 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(to bottom, #2d132c 0%, #1a1a2e 100%);
+            display: none;
+        }
+        #dialog-scene.active {
+            display: block;
         }
         .sprite {
             position: absolute;
@@ -154,6 +158,55 @@
             background: #3a7d32;
             border: 1px solid #2d5a27;
         }
+
+        /* Player HUD */
+        #player-hud {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 8px;
+            padding: 8px 12px;
+            z-index: 150;
+        }
+        #hud-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+        #hud-level {
+            color: #fbbf24;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        #hud-xp {
+            color: #a78bfa;
+            font-size: 12px;
+        }
+        #hud-stats {
+            display: flex;
+            gap: 8px;
+            font-size: 10px;
+            flex-wrap: wrap;
+        }
+        .hud-stat {
+            color: #fff;
+        }
+        .hud-stat span {
+            font-weight: bold;
+        }
+        .stat-str { color: #ef4444; }
+        .stat-vit { color: #22c55e; }
+        .stat-def { color: #3b82f6; }
+        .stat-mag { color: #c084fc; }
+        #hud-ley {
+            color: #67e8f9;
+            font-size: 11px;
+            margin-left: auto;
+        }
+
         #player {
             position: absolute;
             width: 40px;
@@ -184,16 +237,14 @@
         }
 
         /* Enemy on map */
-        #enemy-map {
+        .enemy-map {
             position: absolute;
             width: 50px;
             height: 50px;
-            background: linear-gradient(to bottom, #ef4444 0%, #b91c1c 100%);
-            border: 3px solid #7f1d1d;
             border-radius: 50%;
             z-index: 99;
         }
-        #enemy-map .enemy-face {
+        .enemy-map .enemy-face {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -201,23 +252,35 @@
             width: 30px;
             height: 20px;
         }
-        #enemy-map .enemy-eyes {
+        .enemy-map .enemy-eyes {
             display: flex;
             justify-content: space-between;
             padding: 0 2px;
         }
-        #enemy-map .enemy-eye {
+        .enemy-map .enemy-eye {
             width: 8px;
             height: 8px;
             background: #fff;
             border-radius: 50%;
         }
-        #enemy-map .enemy-mouth {
+        .enemy-map .enemy-mouth {
             width: 20px;
             height: 8px;
             background: #000;
             margin: 4px auto 0;
             border-radius: 0 0 10px 10px;
+        }
+        .enemy-slime {
+            background: linear-gradient(to bottom, #ef4444 0%, #b91c1c 100%);
+            border: 3px solid #7f1d1d;
+        }
+        .enemy-goblin {
+            background: linear-gradient(to bottom, #22c55e 0%, #15803d 100%);
+            border: 3px solid #14532d;
+        }
+        .enemy-bat {
+            background: linear-gradient(to bottom, #8b5cf6 0%, #6d28d9 100%);
+            border: 3px solid #4c1d95;
         }
 
         /* Virtual Joystick */
@@ -247,7 +310,7 @@
         /* Scene indicator */
         #scene-label {
             position: absolute;
-            top: 50px;
+            top: 85px;
             left: 50%;
             transform: translateX(-50%);
             color: rgba(255,255,255,0.5);
@@ -278,7 +341,6 @@
             transform: translateX(-50%);
             width: 120px;
             height: 120px;
-            background: linear-gradient(to bottom, #ef4444 0%, #b91c1c 100%);
             border: 4px solid #7f1d1d;
             border-radius: 50%;
         }
@@ -318,30 +380,30 @@
             font-weight: bold;
         }
 
-        /* Health Bars */
-        .health-bar-container {
+        /* Health/Ley Bars */
+        .bar-container {
             position: absolute;
             width: 80%;
             left: 10%;
-            height: 24px;
+            height: 20px;
             background: #333;
-            border-radius: 12px;
+            border-radius: 10px;
             border: 2px solid #555;
             overflow: hidden;
         }
-        .health-bar {
+        .bar-fill {
             height: 100%;
             transition: width 0.3s ease;
-            border-radius: 10px;
+            border-radius: 8px;
         }
-        .health-bar-label {
+        .bar-label {
             position: absolute;
             width: 100%;
             text-align: center;
             color: #fff;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: bold;
-            line-height: 24px;
+            line-height: 20px;
             text-shadow: 1px 1px 2px #000;
         }
         #enemy-health-container {
@@ -351,10 +413,16 @@
             background: linear-gradient(to right, #ef4444, #f87171);
         }
         #player-health-container {
-            bottom: 180px;
+            bottom: 200px;
         }
         #player-health {
             background: linear-gradient(to right, #22c55e, #4ade80);
+        }
+        #player-ley-container {
+            bottom: 175px;
+        }
+        #player-ley {
+            background: linear-gradient(to right, #06b6d4, #67e8f9);
         }
 
         /* Combat UI */
@@ -366,31 +434,39 @@
             height: 160px;
             background: rgba(0, 0, 0, 0.9);
             border-top: 3px solid #4a9fff;
-            padding: 15px;
+            padding: 10px 15px;
         }
-        #player-stats {
+        #player-stats-combat {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         #player-name-combat {
             color: #4a9fff;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: bold;
+        }
+        #player-resources {
+            display: flex;
+            gap: 15px;
+            font-size: 12px;
         }
         #player-hp-text {
             color: #22c55e;
-            font-size: 14px;
+        }
+        #player-ley-text {
+            color: #67e8f9;
         }
         #combat-actions {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             justify-content: center;
+            flex-wrap: wrap;
         }
         .combat-btn {
-            padding: 15px 30px;
-            font-size: 18px;
+            padding: 12px 20px;
+            font-size: 16px;
             font-weight: bold;
             border: none;
             border-radius: 8px;
@@ -401,7 +477,7 @@
             transform: scale(0.95);
         }
         .combat-btn:disabled {
-            opacity: 0.5;
+            opacity: 0.4;
         }
         #attack-btn {
             background: linear-gradient(to bottom, #ef4444, #b91c1c);
@@ -413,6 +489,20 @@
             color: #fff;
             border: 2px solid #1e40af;
         }
+        #spell-btn {
+            background: linear-gradient(to bottom, #06b6d4, #0891b2);
+            color: #fff;
+            border: 2px solid #0e7490;
+        }
+        #spell-btn.no-ley {
+            background: linear-gradient(to bottom, #4b5563, #374151);
+            border-color: #1f2937;
+        }
+        .spell-cost {
+            font-size: 10px;
+            display: block;
+            opacity: 0.8;
+        }
 
         /* Combat Log */
         #combat-log {
@@ -422,7 +512,7 @@
             right: 10%;
             text-align: center;
             color: #fbbf24;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: bold;
             text-shadow: 2px 2px 4px #000;
             min-height: 24px;
@@ -435,6 +525,15 @@
         @keyframes damageFlash {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.3; }
+        }
+
+        /* Magic Flash */
+        .magic-flash {
+            animation: magicFlash 0.5s ease;
+        }
+        @keyframes magicFlash {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(2) hue-rotate(180deg); }
         }
 
         /* Victory/Defeat overlay */
@@ -454,13 +553,18 @@
         #result-text {
             font-size: 36px;
             font-weight: bold;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
         #result-text.victory {
             color: #22c55e;
         }
         #result-text.defeat {
             color: #ef4444;
+        }
+        #xp-gain {
+            color: #a78bfa;
+            font-size: 18px;
+            margin-bottom: 20px;
         }
         #continue-btn {
             padding: 15px 40px;
@@ -471,12 +575,56 @@
             border-radius: 8px;
             cursor: pointer;
         }
+
+        /* Level Up Overlay */
+        #levelup-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 500;
+        }
+        #levelup-overlay.active {
+            display: flex;
+        }
+        #levelup-title {
+            color: #fbbf24;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px #fbbf24;
+        }
+        #levelup-stats {
+            color: #fff;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #levelup-stats div {
+            margin: 6px 0;
+        }
+        #levelup-btn {
+            padding: 15px 40px;
+            font-size: 18px;
+            background: linear-gradient(to bottom, #fbbf24, #d97706);
+            color: #000;
+            border: 2px solid #92400e;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div id="game">
         <!-- Dialog Scene -->
-        <div id="dialog-scene">
+        <div id="dialog-scene" class="active">
             <div id="sprite-left" class="sprite">
                 <div class="sprite-face">
                     <div class="sprite-eyes">
@@ -507,6 +655,21 @@
         <!-- Exploration Scene -->
         <div id="exploration-scene">
             <div id="world"></div>
+            <div id="player-hud">
+                <div id="hud-top">
+                    <div>
+                        <div id="hud-level">Lv. 1</div>
+                        <div id="hud-xp">XP: 0 / 30</div>
+                    </div>
+                    <div id="hud-ley">Ley: 50 / 50</div>
+                </div>
+                <div id="hud-stats">
+                    <div class="hud-stat">STR: <span class="stat-str" id="hud-str">5</span></div>
+                    <div class="hud-stat">VIT: <span class="stat-vit" id="hud-vit">5</span></div>
+                    <div class="hud-stat">DEF: <span class="stat-def" id="hud-def">5</span></div>
+                    <div class="hud-stat">MAG: <span class="stat-mag" id="hud-mag">5</span></div>
+                </div>
+            </div>
             <div id="player">
                 <div class="sprite-face">
                     <div class="sprite-eyes">
@@ -516,15 +679,7 @@
                     <div class="sprite-mouth"></div>
                 </div>
             </div>
-            <div id="enemy-map">
-                <div class="enemy-face">
-                    <div class="enemy-eyes">
-                        <div class="enemy-eye"></div>
-                        <div class="enemy-eye"></div>
-                    </div>
-                    <div class="enemy-mouth"></div>
-                </div>
-            </div>
+            <div id="enemies-container"></div>
             <div id="joystick-area">
                 <div id="joystick-knob"></div>
             </div>
@@ -543,69 +698,133 @@
                     <div class="enemy-mouth"></div>
                 </div>
             </div>
-            <div id="enemy-health-container" class="health-bar-container">
-                <div id="enemy-health" class="health-bar" style="width: 100%"></div>
-                <div id="enemy-health-label" class="health-bar-label">50 / 50</div>
+            <div id="enemy-health-container" class="bar-container">
+                <div id="enemy-health" class="bar-fill" style="width: 100%"></div>
+                <div id="enemy-health-label" class="bar-label">50 / 50</div>
             </div>
             <div id="combat-log"></div>
-            <div id="player-health-container" class="health-bar-container">
-                <div id="player-health" class="health-bar" style="width: 100%"></div>
-                <div id="player-health-label" class="health-bar-label">100 / 100</div>
+            <div id="player-health-container" class="bar-container">
+                <div id="player-health" class="bar-fill" style="width: 100%"></div>
+                <div id="player-health-label" class="bar-label">100 / 100</div>
+            </div>
+            <div id="player-ley-container" class="bar-container">
+                <div id="player-ley" class="bar-fill" style="width: 100%"></div>
+                <div id="player-ley-label" class="bar-label">50 / 50</div>
             </div>
             <div id="combat-ui">
-                <div id="player-stats">
+                <div id="player-stats-combat">
                     <div id="player-name-combat">Ley</div>
-                    <div id="player-hp-text">HP: 100 / 100</div>
+                    <div id="player-resources">
+                        <div id="player-hp-text">HP: 100/100</div>
+                        <div id="player-ley-text">Ley: 50/50</div>
+                    </div>
                 </div>
                 <div id="combat-actions">
                     <button id="attack-btn" class="combat-btn">Attack</button>
+                    <button id="spell-btn" class="combat-btn">Spark<span class="spell-cost">15 Ley</span></button>
                     <button id="defend-btn" class="combat-btn">Defend</button>
                 </div>
             </div>
             <div id="combat-result">
                 <div id="result-text"></div>
+                <div id="xp-gain"></div>
                 <button id="continue-btn">Continue</button>
             </div>
+        </div>
+
+        <!-- Level Up Overlay -->
+        <div id="levelup-overlay">
+            <div id="levelup-title">LEVEL UP!</div>
+            <div id="levelup-stats">
+                <div>Level: <span id="lu-level">2</span></div>
+                <div>STR: <span id="lu-str">5 → 6</span></div>
+                <div>VIT: <span id="lu-vit">5 → 6</span></div>
+                <div>DEF: <span id="lu-def">5 → 6</span></div>
+                <div>MAG: <span id="lu-mag">5 → 6</span></div>
+                <div>Max HP: <span id="lu-hp">100 → 110</span></div>
+                <div>Max Ley: <span id="lu-ley">50 → 60</span></div>
+            </div>
+            <button id="levelup-btn">Awesome!</button>
         </div>
 
         <div id="scene-label"></div>
     </div>
 
     <script>
+        // Enemy Templates
+        const enemyTemplates = {
+            slime: { name: 'Slime', hp: 40, attack: 8, xp: 15, color: 'slime' },
+            goblin: { name: 'Goblin', hp: 55, attack: 12, xp: 25, color: 'goblin' },
+            bat: { name: 'Shadow Bat', hp: 35, attack: 15, xp: 20, color: 'bat' }
+        };
+
+        // Spell cost
+        const SPELL_COST = 15;
+
         // Game State
         const game = {
             currentScene: 'dialog',
             dialogIndex: 0,
+            dialogQueue: null,
+            dialogCallback: null,
             player: {
                 x: 0,
                 y: 0,
+                level: 1,
+                xp: 0,
+                xpToLevel: 30,
+                str: 5,  // Affects attack damage
+                vit: 5,  // Affects max HP and max Ley
+                def: 5,  // Affects damage reduction
+                mag: 5,  // Affects spell damage
                 hp: 100,
                 maxHp: 100,
-                attack: 15,
-                defense: 5,
+                ley: 50,    // Current ley (mana) - NEVER replenishes
+                maxLey: 50, // Max ley
                 defending: false
             },
-            enemy: {
-                x: 0,
-                y: 0,
-                hp: 50,
-                maxHp: 50,
-                attack: 12,
-                alive: true
-            },
+            enemies: [],
+            currentEnemy: null,
+            currentEnemyIndex: -1,
             joystick: { active: false, dx: 0, dy: 0 },
             combatTurn: 'player',
-            combatActive: false
+            combatActive: false,
+            pendingLevelUp: false
         };
 
-        // Dialog Data
-        const dialogScript = [
+        // Calculate derived stats
+        function calcAttack() {
+            return 10 + (game.player.str * 2);
+        }
+        function calcMaxHp() {
+            return 80 + (game.player.vit * 10);
+        }
+        function calcDefense() {
+            return game.player.def * 2;
+        }
+        function calcMaxLey() {
+            return 30 + (game.player.vit * 5);
+        }
+        function calcSpellDamage() {
+            return 15 + (game.player.mag * 4);
+        }
+
+        // Dialog Scripts
+        const introDialog = [
             { speaker: 'Ley', text: 'Hello there! Welcome to our world.' },
             { speaker: 'Mira', text: 'Oh, a new visitor! How exciting!' },
-            { speaker: 'Ley', text: 'This is just a test scene to make sure everything works.' },
-            { speaker: 'Mira', text: 'Watch out for the red slime on the map!' },
-            { speaker: 'Ley', text: 'Walk into it to start a battle. Good luck!' },
-            { speaker: 'Mira', text: 'Use the joystick to move. Tap to begin!' }
+            { speaker: 'Ley', text: 'There are monsters nearby. Defeat them to gain experience!' },
+            { speaker: 'Mira', text: 'You have 4 stats: STR, VIT, DEF, and MAG.' },
+            { speaker: 'Ley', text: 'STR boosts attack, VIT boosts HP and Ley, DEF reduces damage.' },
+            { speaker: 'Mira', text: 'MAG increases your spell power. Use "Spark" in combat!' },
+            { speaker: 'Ley', text: 'But be careful... Ley energy never replenishes. Use it wisely!' },
+            { speaker: 'Mira', text: 'Good luck out there! Tap to begin!' }
+        ];
+
+        const allClearedDialog = [
+            { speaker: 'Mira', text: 'Amazing! You defeated all the monsters!' },
+            { speaker: 'Ley', text: 'The area is safe now. Great work, hero!' },
+            { speaker: 'Mira', text: 'Thanks for playing this demo!' }
         ];
 
         // DOM Elements
@@ -615,29 +834,71 @@
         const dialogSpeaker = document.getElementById('dialog-speaker');
         const dialogText = document.getElementById('dialog-text');
         const playerEl = document.getElementById('player');
-        const enemyMap = document.getElementById('enemy-map');
+        const enemiesContainer = document.getElementById('enemies-container');
         const joystickArea = document.getElementById('joystick-area');
         const joystickKnob = document.getElementById('joystick-knob');
         const world = document.getElementById('world');
         const sceneLabel = document.getElementById('scene-label');
 
+        // HUD elements
+        const hudLevel = document.getElementById('hud-level');
+        const hudXp = document.getElementById('hud-xp');
+        const hudStr = document.getElementById('hud-str');
+        const hudVit = document.getElementById('hud-vit');
+        const hudDef = document.getElementById('hud-def');
+        const hudMag = document.getElementById('hud-mag');
+        const hudLey = document.getElementById('hud-ley');
+
         // Combat elements
         const combatEnemy = document.getElementById('combat-enemy');
+        const enemyNameEl = document.getElementById('enemy-name');
         const enemyHealth = document.getElementById('enemy-health');
         const enemyHealthLabel = document.getElementById('enemy-health-label');
         const playerHealth = document.getElementById('player-health');
         const playerHealthLabel = document.getElementById('player-health-label');
+        const playerLeyBar = document.getElementById('player-ley');
+        const playerLeyLabel = document.getElementById('player-ley-label');
         const playerHpText = document.getElementById('player-hp-text');
+        const playerLeyText = document.getElementById('player-ley-text');
         const combatLog = document.getElementById('combat-log');
         const attackBtn = document.getElementById('attack-btn');
+        const spellBtn = document.getElementById('spell-btn');
         const defendBtn = document.getElementById('defend-btn');
         const combatResult = document.getElementById('combat-result');
         const resultText = document.getElementById('result-text');
+        const xpGainEl = document.getElementById('xp-gain');
         const continueBtn = document.getElementById('continue-btn');
+
+        // Level up elements
+        const levelupOverlay = document.getElementById('levelup-overlay');
+        const levelupBtn = document.getElementById('levelup-btn');
+
+        // Update HUD
+        function updateHUD() {
+            hudLevel.textContent = `Lv. ${game.player.level}`;
+            hudXp.textContent = `XP: ${game.player.xp} / ${game.player.xpToLevel}`;
+            hudStr.textContent = game.player.str;
+            hudVit.textContent = game.player.vit;
+            hudDef.textContent = game.player.def;
+            hudMag.textContent = game.player.mag;
+            hudLey.textContent = `Ley: ${game.player.ley} / ${game.player.maxLey}`;
+        }
+
+        // Initialize enemies
+        function initEnemies() {
+            game.enemies = [
+                { ...enemyTemplates.slime, id: 0, x: 0, y: 0, alive: true },
+                { ...enemyTemplates.slime, id: 1, x: 0, y: 0, alive: true },
+                { ...enemyTemplates.goblin, id: 2, x: 0, y: 0, alive: true },
+                { ...enemyTemplates.bat, id: 3, x: 0, y: 0, alive: true }
+            ];
+        }
 
         // Initialize grass tiles
         function initWorld() {
             world.innerHTML = '';
+            enemiesContainer.innerHTML = '';
+
             const cols = Math.ceil(window.innerWidth / 40) + 2;
             const rows = Math.ceil(window.innerHeight / 40) + 2;
 
@@ -658,13 +919,41 @@
             game.player.y = window.innerHeight / 2 - 30;
             updatePlayerPosition();
 
-            // Position enemy
-            if (game.enemy.alive) {
-                game.enemy.x = window.innerWidth / 2 + 80;
-                game.enemy.y = window.innerHeight / 3;
-                updateEnemyPosition();
-                enemyMap.style.display = 'block';
-            }
+            // Position enemies
+            const positions = [
+                { x: window.innerWidth * 0.2, y: window.innerHeight * 0.25 },
+                { x: window.innerWidth * 0.75, y: window.innerHeight * 0.2 },
+                { x: window.innerWidth * 0.15, y: window.innerHeight * 0.6 },
+                { x: window.innerWidth * 0.8, y: window.innerHeight * 0.55 }
+            ];
+
+            game.enemies.forEach((enemy, i) => {
+                if (enemy.alive) {
+                    enemy.x = positions[i].x;
+                    enemy.y = positions[i].y;
+                    createEnemyElement(enemy);
+                }
+            });
+
+            updateHUD();
+        }
+
+        function createEnemyElement(enemy) {
+            const el = document.createElement('div');
+            el.className = `enemy-map enemy-${enemy.color}`;
+            el.id = `enemy-${enemy.id}`;
+            el.innerHTML = `
+                <div class="enemy-face">
+                    <div class="enemy-eyes">
+                        <div class="enemy-eye"></div>
+                        <div class="enemy-eye"></div>
+                    </div>
+                    <div class="enemy-mouth"></div>
+                </div>
+            `;
+            el.style.left = enemy.x + 'px';
+            el.style.top = enemy.y + 'px';
+            enemiesContainer.appendChild(el);
         }
 
         function updatePlayerPosition() {
@@ -672,34 +961,55 @@
             playerEl.style.top = game.player.y + 'px';
         }
 
-        function updateEnemyPosition() {
-            enemyMap.style.left = game.enemy.x + 'px';
-            enemyMap.style.top = game.enemy.y + 'px';
-        }
-
         // Collision detection
-        function checkCollision() {
-            if (!game.enemy.alive) return false;
-
+        function checkEnemyCollision() {
             const px = game.player.x + 20;
             const py = game.player.y + 30;
-            const ex = game.enemy.x + 25;
-            const ey = game.enemy.y + 25;
 
-            const dist = Math.sqrt((px - ex) ** 2 + (py - ey) ** 2);
-            return dist < 50;
+            for (let i = 0; i < game.enemies.length; i++) {
+                const enemy = game.enemies[i];
+                if (!enemy.alive) continue;
+
+                const ex = enemy.x + 25;
+                const ey = enemy.y + 25;
+                const dist = Math.sqrt((px - ex) ** 2 + (py - ey) ** 2);
+
+                if (dist < 50) {
+                    return i;
+                }
+            }
+            return -1;
         }
 
         // Dialog System
+        function showDialog(script, callback) {
+            game.dialogQueue = [...script];
+            game.dialogCallback = callback;
+            game.dialogIndex = 0;
+
+            const line = game.dialogQueue[0];
+            dialogSpeaker.textContent = line.speaker;
+            dialogText.textContent = line.text;
+            dialogSpeaker.style.color = line.speaker === 'Ley' ? '#4a9fff' : '#f472b6';
+
+            game.currentScene = 'dialog';
+            dialogScene.classList.add('active');
+            explorationScene.style.display = 'none';
+            combatScene.style.display = 'none';
+        }
+
         function advanceDialog() {
             game.dialogIndex++;
 
-            if (game.dialogIndex >= dialogScript.length) {
-                switchToExploration();
+            if (game.dialogIndex >= game.dialogQueue.length) {
+                dialogScene.classList.remove('active');
+                if (game.dialogCallback) {
+                    game.dialogCallback();
+                }
                 return;
             }
 
-            const line = dialogScript[game.dialogIndex];
+            const line = game.dialogQueue[game.dialogIndex];
             dialogSpeaker.textContent = line.speaker;
             dialogText.textContent = line.text;
             dialogSpeaker.style.color = line.speaker === 'Ley' ? '#4a9fff' : '#f472b6';
@@ -707,65 +1017,143 @@
 
         function switchToExploration() {
             game.currentScene = 'exploration';
-            dialogScene.style.display = 'none';
+            dialogScene.classList.remove('active');
             explorationScene.style.display = 'block';
             combatScene.style.display = 'none';
             sceneLabel.textContent = 'Exploration Mode';
             initWorld();
         }
 
+        // Check if all enemies are defeated
+        function checkAllEnemiesDefeated() {
+            return game.enemies.every(e => !e.alive);
+        }
+
         // Combat System
-        function startCombat() {
+        function startCombat(enemyIndex) {
+            game.currentEnemyIndex = enemyIndex;
+            game.currentEnemy = { ...game.enemies[enemyIndex] };
+            game.currentEnemy.currentHp = game.currentEnemy.hp;
+
             game.currentScene = 'combat';
             explorationScene.style.display = 'none';
             combatScene.style.display = 'block';
             sceneLabel.textContent = 'Combat!';
 
+            // Set enemy appearance
+            enemyNameEl.textContent = game.currentEnemy.name;
+            combatEnemy.className = '';
+            combatEnemy.style.background = '';
+
+            if (game.currentEnemy.color === 'slime') {
+                combatEnemy.style.background = 'linear-gradient(to bottom, #ef4444 0%, #b91c1c 100%)';
+                combatEnemy.style.borderColor = '#7f1d1d';
+            } else if (game.currentEnemy.color === 'goblin') {
+                combatEnemy.style.background = 'linear-gradient(to bottom, #22c55e 0%, #15803d 100%)';
+                combatEnemy.style.borderColor = '#14532d';
+            } else if (game.currentEnemy.color === 'bat') {
+                combatEnemy.style.background = 'linear-gradient(to bottom, #8b5cf6 0%, #6d28d9 100%)';
+                combatEnemy.style.borderColor = '#4c1d95';
+            }
+
             game.combatActive = true;
             game.combatTurn = 'player';
             game.player.defending = false;
 
-            // Reset enemy HP for this fight
-            game.enemy.hp = game.enemy.maxHp;
-
-            updateHealthBars();
-            combatLog.textContent = 'A wild Slime appears!';
+            updateCombatBars();
+            updateSpellButton();
+            combatLog.textContent = `A wild ${game.currentEnemy.name} appears!`;
             combatResult.style.display = 'none';
 
             attackBtn.disabled = false;
             defendBtn.disabled = false;
         }
 
-        function updateHealthBars() {
-            const enemyPercent = (game.enemy.hp / game.enemy.maxHp) * 100;
-            const playerPercent = (game.player.hp / game.player.maxHp) * 100;
+        function updateCombatBars() {
+            const enemyPercent = (game.currentEnemy.currentHp / game.currentEnemy.hp) * 100;
+            const playerHpPercent = (game.player.hp / game.player.maxHp) * 100;
+            const playerLeyPercent = (game.player.ley / game.player.maxLey) * 100;
 
             enemyHealth.style.width = enemyPercent + '%';
-            enemyHealthLabel.textContent = `${game.enemy.hp} / ${game.enemy.maxHp}`;
+            enemyHealthLabel.textContent = `${game.currentEnemy.currentHp} / ${game.currentEnemy.hp}`;
 
-            playerHealth.style.width = playerPercent + '%';
+            playerHealth.style.width = playerHpPercent + '%';
             playerHealthLabel.textContent = `${game.player.hp} / ${game.player.maxHp}`;
-            playerHpText.textContent = `HP: ${game.player.hp} / ${game.player.maxHp}`;
+            playerHpText.textContent = `HP: ${game.player.hp}/${game.player.maxHp}`;
+
+            playerLeyBar.style.width = playerLeyPercent + '%';
+            playerLeyLabel.textContent = `${game.player.ley} / ${game.player.maxLey}`;
+            playerLeyText.textContent = `Ley: ${game.player.ley}/${game.player.maxLey}`;
+        }
+
+        function updateSpellButton() {
+            if (game.player.ley < SPELL_COST) {
+                spellBtn.classList.add('no-ley');
+                spellBtn.disabled = true;
+            } else {
+                spellBtn.classList.remove('no-ley');
+                spellBtn.disabled = false;
+            }
+        }
+
+        function disableAllActions() {
+            attackBtn.disabled = true;
+            spellBtn.disabled = true;
+            defendBtn.disabled = true;
+        }
+
+        function enableActions() {
+            attackBtn.disabled = false;
+            defendBtn.disabled = false;
+            updateSpellButton();
         }
 
         function playerAttack() {
             if (!game.combatActive || game.combatTurn !== 'player') return;
 
-            attackBtn.disabled = true;
-            defendBtn.disabled = true;
+            disableAllActions();
             game.player.defending = false;
 
-            // Calculate damage
-            const damage = Math.floor(game.player.attack + Math.random() * 5);
-            game.enemy.hp = Math.max(0, game.enemy.hp - damage);
+            // Calculate damage based on STR
+            const baseDamage = calcAttack();
+            const damage = Math.floor(baseDamage + Math.random() * 5);
+            game.currentEnemy.currentHp = Math.max(0, game.currentEnemy.currentHp - damage);
 
             combatLog.textContent = `Ley attacks for ${damage} damage!`;
             combatEnemy.classList.add('damage-flash');
             setTimeout(() => combatEnemy.classList.remove('damage-flash'), 300);
 
-            updateHealthBars();
+            updateCombatBars();
 
-            if (game.enemy.hp <= 0) {
+            if (game.currentEnemy.currentHp <= 0) {
+                endCombat(true);
+            } else {
+                setTimeout(enemyTurn, 1000);
+            }
+        }
+
+        function playerSpell() {
+            if (!game.combatActive || game.combatTurn !== 'player') return;
+            if (game.player.ley < SPELL_COST) return;
+
+            disableAllActions();
+            game.player.defending = false;
+
+            // Spend Ley (never comes back!)
+            game.player.ley -= SPELL_COST;
+
+            // Calculate spell damage based on MAG
+            const baseDamage = calcSpellDamage();
+            const damage = Math.floor(baseDamage + Math.random() * 8);
+            game.currentEnemy.currentHp = Math.max(0, game.currentEnemy.currentHp - damage);
+
+            combatLog.textContent = `Ley casts Spark for ${damage} magic damage!`;
+            combatEnemy.classList.add('magic-flash');
+            setTimeout(() => combatEnemy.classList.remove('magic-flash'), 500);
+
+            updateCombatBars();
+
+            if (game.currentEnemy.currentHp <= 0) {
                 endCombat(true);
             } else {
                 setTimeout(enemyTurn, 1000);
@@ -775,8 +1163,7 @@
         function playerDefend() {
             if (!game.combatActive || game.combatTurn !== 'player') return;
 
-            attackBtn.disabled = true;
-            defendBtn.disabled = true;
+            disableAllActions();
             game.player.defending = true;
 
             combatLog.textContent = 'Ley takes a defensive stance!';
@@ -787,20 +1174,23 @@
         function enemyTurn() {
             game.combatTurn = 'enemy';
 
-            // Calculate damage (reduced if defending)
-            let damage = Math.floor(game.enemy.attack + Math.random() * 4);
+            // Calculate damage with DEF reduction
+            const defense = calcDefense();
+            let baseDamage = game.currentEnemy.attack + Math.floor(Math.random() * 4);
+            let damage = Math.max(1, baseDamage - defense);
+
             if (game.player.defending) {
                 damage = Math.floor(damage * 0.4);
-                combatLog.textContent = `Slime attacks! Blocked! Only ${damage} damage!`;
+                combatLog.textContent = `${game.currentEnemy.name} attacks! Blocked! Only ${damage} damage!`;
             } else {
-                combatLog.textContent = `Slime attacks for ${damage} damage!`;
+                combatLog.textContent = `${game.currentEnemy.name} attacks for ${damage} damage!`;
             }
 
             game.player.hp = Math.max(0, game.player.hp - damage);
             playerEl.classList.add('damage-flash');
             setTimeout(() => playerEl.classList.remove('damage-flash'), 300);
 
-            updateHealthBars();
+            updateCombatBars();
 
             if (game.player.hp <= 0) {
                 endCombat(false);
@@ -808,8 +1198,7 @@
                 setTimeout(() => {
                     game.combatTurn = 'player';
                     game.player.defending = false;
-                    attackBtn.disabled = false;
-                    defendBtn.disabled = false;
+                    enableActions();
                     combatLog.textContent = 'Your turn!';
                 }, 1000);
             }
@@ -817,32 +1206,103 @@
 
         function endCombat(victory) {
             game.combatActive = false;
-            attackBtn.disabled = true;
-            defendBtn.disabled = true;
+            disableAllActions();
 
             setTimeout(() => {
                 combatResult.style.display = 'flex';
                 if (victory) {
                     resultText.textContent = 'VICTORY!';
                     resultText.className = 'victory';
-                    game.enemy.alive = false;
+                    game.enemies[game.currentEnemyIndex].alive = false;
+
+                    // Grant XP
+                    const xpGained = game.currentEnemy.xp;
+                    game.player.xp += xpGained;
+                    xpGainEl.textContent = `+${xpGained} XP`;
+
+                    // Check for level up
+                    if (game.player.xp >= game.player.xpToLevel) {
+                        game.pendingLevelUp = true;
+                    }
                 } else {
                     resultText.textContent = 'DEFEAT';
                     resultText.className = 'defeat';
-                    // Restore player HP for retry
+                    xpGainEl.textContent = '';
+                    // Restore player HP for retry (but NOT Ley!)
                     game.player.hp = game.player.maxHp;
-                    game.enemy.alive = true;
                 }
             }, 500);
         }
 
+        function levelUp() {
+            const oldStr = game.player.str;
+            const oldVit = game.player.vit;
+            const oldDef = game.player.def;
+            const oldMag = game.player.mag;
+            const oldMaxHp = game.player.maxHp;
+            const oldMaxLey = game.player.maxLey;
+
+            game.player.xp -= game.player.xpToLevel;
+            game.player.level++;
+            game.player.xpToLevel = Math.floor(game.player.xpToLevel * 1.5);
+
+            // Increase stats
+            game.player.str += 2;
+            game.player.vit += 2;
+            game.player.def += 1;
+            game.player.mag += 2;
+
+            // Recalculate max HP and heal (but NOT Ley - it never replenishes!)
+            game.player.maxHp = calcMaxHp();
+            game.player.hp = game.player.maxHp;
+            game.player.maxLey = calcMaxLey();
+            // Note: current ley stays the same, only max increases
+
+            // Update level up display
+            document.getElementById('lu-level').textContent = game.player.level;
+            document.getElementById('lu-str').textContent = `${oldStr} → ${game.player.str}`;
+            document.getElementById('lu-vit').textContent = `${oldVit} → ${game.player.vit}`;
+            document.getElementById('lu-def').textContent = `${oldDef} → ${game.player.def}`;
+            document.getElementById('lu-mag').textContent = `${oldMag} → ${game.player.mag}`;
+            document.getElementById('lu-hp').textContent = `${oldMaxHp} → ${game.player.maxHp}`;
+            document.getElementById('lu-ley').textContent = `${oldMaxLey} → ${game.player.maxLey}`;
+
+            levelupOverlay.classList.add('active');
+        }
+
         function returnToExploration() {
             combatResult.style.display = 'none';
-            switchToExploration();
 
-            if (!game.enemy.alive) {
-                enemyMap.style.display = 'none';
+            // Check for pending level up
+            if (game.pendingLevelUp) {
+                game.pendingLevelUp = false;
+                levelUp();
+                return;
             }
+
+            // Check if all enemies defeated
+            if (checkAllEnemiesDefeated()) {
+                showDialog(allClearedDialog, () => {
+                    switchToExploration();
+                });
+                return;
+            }
+
+            switchToExploration();
+        }
+
+        function closeLevelUp() {
+            levelupOverlay.classList.remove('active');
+
+            // Check if all enemies defeated
+            if (checkAllEnemiesDefeated()) {
+                showDialog(allClearedDialog, () => {
+                    switchToExploration();
+                });
+                return;
+            }
+
+            switchToExploration();
         }
 
         // Joystick Controls
@@ -908,9 +1368,10 @@
                 updatePlayerPosition();
 
                 // Check for enemy collision
-                if (checkCollision()) {
+                const enemyIndex = checkEnemyCollision();
+                if (enemyIndex >= 0) {
                     game.joystick.active = false;
-                    startCombat();
+                    startCombat(enemyIndex);
                 }
             }
             requestAnimationFrame(gameLoop);
@@ -918,7 +1379,17 @@
 
         // Event Listeners
         document.addEventListener('DOMContentLoaded', () => {
+            // Initialize
+            initEnemies();
+            game.player.maxHp = calcMaxHp();
+            game.player.hp = game.player.maxHp;
+            game.player.maxLey = calcMaxLey();
+            game.player.ley = game.player.maxLey; // Start with full Ley
+
             sceneLabel.textContent = 'Dialog Scene';
+
+            // Start with intro dialog
+            showDialog(introDialog, switchToExploration);
 
             // Dialog tap handler
             dialogScene.addEventListener('click', advanceDialog);
@@ -941,11 +1412,18 @@
             attackBtn.addEventListener('click', playerAttack);
             attackBtn.addEventListener('touchend', (e) => { e.preventDefault(); playerAttack(); });
 
+            spellBtn.addEventListener('click', playerSpell);
+            spellBtn.addEventListener('touchend', (e) => { e.preventDefault(); playerSpell(); });
+
             defendBtn.addEventListener('click', playerDefend);
             defendBtn.addEventListener('touchend', (e) => { e.preventDefault(); playerDefend(); });
 
             continueBtn.addEventListener('click', returnToExploration);
             continueBtn.addEventListener('touchend', (e) => { e.preventDefault(); returnToExploration(); });
+
+            // Level up button
+            levelupBtn.addEventListener('click', closeLevelUp);
+            levelupBtn.addEventListener('touchend', (e) => { e.preventDefault(); closeLevelUp(); });
 
             // Start game loop
             gameLoop();
