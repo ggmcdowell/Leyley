@@ -315,6 +315,67 @@
             background: linear-gradient(to bottom, #22d3ee 0%, #0891b2 100%);
             border: 3px solid #155e75;
         }
+        .enemy-warden {
+            background: linear-gradient(to bottom, #dc2626 0%, #991b1b 100%);
+            border: 3px solid #7f1d1d;
+            width: 55px;
+            height: 55px;
+        }
+        .combat-enemy.enemy-warden {
+            width: 90px;
+            height: 90px;
+        }
+        /* Act 2 Enemies */
+        .enemy-ironbound {
+            background: linear-gradient(to bottom, #78716c 0%, #57534e 100%);
+            border: 3px solid #44403c;
+            width: 50px;
+            height: 50px;
+        }
+        .combat-enemy.enemy-ironbound {
+            width: 80px;
+            height: 80px;
+        }
+        .enemy-remnant {
+            background: linear-gradient(to bottom, #8b5cf6 0%, #6d28d9 100%);
+            border: 3px solid #4c1d95;
+        }
+        .enemy-horror {
+            background: linear-gradient(to bottom, #84cc16 0%, #65a30d 100%);
+            border: 3px solid #4d7c0f;
+            width: 50px;
+            height: 50px;
+        }
+        .combat-enemy.enemy-horror {
+            width: 85px;
+            height: 85px;
+        }
+        .enemy-convergence {
+            background: linear-gradient(to bottom, #06b6d4 0%, #0891b2 100%);
+            border: 3px solid #0e7490;
+            width: 60px;
+            height: 60px;
+        }
+        .combat-enemy.enemy-convergence {
+            width: 100px;
+            height: 100px;
+        }
+        /* Act 3 Final Boss */
+        .enemy-assemblage {
+            background: linear-gradient(135deg, #dc2626 0%, #7c3aed 50%, #0891b2 100%);
+            border: 4px solid #fbbf24;
+            width: 70px;
+            height: 70px;
+            animation: assemblage-pulse 2s ease-in-out infinite;
+        }
+        .combat-enemy.enemy-assemblage {
+            width: 120px;
+            height: 120px;
+        }
+        @keyframes assemblage-pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(251, 191, 36, 0.8); }
+        }
 
         /* Virtual Joystick */
         #joystick-area {
@@ -892,12 +953,81 @@
         .element-vital { border-color: #22c55e !important; }
         .element-thermal { border-color: #f97316 !important; }
         .element-aetheric { border-color: #a855f7 !important; }
+
+        /* Player Choice UI */
+        #choice-container {
+            position: absolute;
+            bottom: 20px;
+            left: 10px;
+            right: 10px;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+        }
+        #choice-container.active {
+            display: flex;
+        }
+        .choice-btn {
+            padding: 15px 20px;
+            font-size: 14px;
+            background: linear-gradient(to bottom, #374151, #1f2937);
+            color: #fff;
+            border: 2px solid #4b5563;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            transition: border-color 0.2s, transform 0.1s;
+        }
+        .choice-btn:hover, .choice-btn:focus {
+            border-color: #fbbf24;
+            transform: scale(1.02);
+        }
+        .choice-btn:active {
+            transform: scale(0.98);
+        }
+        .choice-title {
+            font-weight: bold;
+            color: #fbbf24;
+            margin-bottom: 4px;
+        }
+        .choice-desc {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        /* Scene location header */
+        #scene-location {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 8px 20px;
+            border-radius: 20px;
+            border: 1px solid #4a3b6b;
+            color: #a78bfa;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 100;
+            display: none;
+        }
+        #scene-location.active {
+            display: block;
+        }
+
+        /* Stage directions in dialog */
+        .stage-direction {
+            color: #6b7280;
+            font-style: italic;
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
     <div id="game">
         <!-- Dialog Scene -->
         <div id="dialog-scene" class="active">
+            <div id="scene-location">Underground Tunnel</div>
             <div id="sprite-left" class="dialog-sprite">
                 <div class="dialog-sprite-face">
                     <div class="dialog-sprite-eyes">
@@ -923,6 +1053,7 @@
                 <div id="dialog-text">The threads grow thin here...</div>
                 <div id="dialog-continue">tap to continue</div>
             </div>
+            <div id="choice-container"></div>
         </div>
 
         <!-- Exploration Scene -->
@@ -1224,6 +1355,77 @@
                 cssClass: 'enemy-wisp',
                 ai: 'wisp',
                 skills: [{ id: 'null_pulse', name: 'Null Pulse', lpDrain: 10 }]
+            },
+            warden: {
+                name: 'Veinkeeper Warden',
+                hp: 120, atk: 16, def: 10, tap: 14, spd: 8,
+                xp: 100, gold: 80,
+                element: ELEMENTS.THERMAL,
+                cssClass: 'enemy-warden',
+                ai: 'warden',
+                isBoss: true,
+                skills: [
+                    { id: 'judgment', name: 'Judgment', multiplier: 2.0, element: ELEMENTS.THERMAL },
+                    { id: 'purity_protocol', name: 'Purity Protocol', type: 'buff_allies' }
+                ]
+            },
+            // Act 2 Enemies
+            ironbound: {
+                name: 'Ironbound Deserter',
+                hp: 90, atk: 18, def: 12, tap: 6, spd: 5,
+                xp: 50, gold: 45,
+                element: ELEMENTS.NONE,
+                cssClass: 'enemy-ironbound',
+                ai: 'ironbound',
+                skills: [{ id: 'siege_blow', name: 'Siege Blow', multiplier: 2.5, element: ELEMENTS.NONE }]
+            },
+            remnant: {
+                name: 'Hollow March Remnant',
+                hp: 60, atk: 10, def: 7, tap: 12, spd: 8,
+                xp: 45, gold: 35,
+                element: ELEMENTS.AETHERIC,
+                cssClass: 'enemy-remnant',
+                ai: 'remnant',
+                skills: [{ id: 'soul_scream', name: 'Soul Scream', type: 'aoe', multiplier: 0.8, element: ELEMENTS.AETHERIC, confuseChance: 0.3 }]
+            },
+            horror: {
+                name: 'Awakened Horror',
+                hp: 100, atk: 14, def: 8, tap: 16, spd: 9,
+                xp: 80, gold: 60,
+                element: ELEMENTS.VITAL,
+                cssClass: 'enemy-horror',
+                ai: 'horror',
+                isBoss: true,
+                skills: [{ id: 'memory_drown', name: 'Memory Drown', type: 'stun', duration: 1 }]
+            },
+            convergence: {
+                name: 'Node Wisp Convergence',
+                hp: 150, atk: 12, def: 6, tap: 18, spd: 10,
+                xp: 120, gold: 100,
+                element: ELEMENTS.AETHERIC,
+                cssClass: 'enemy-convergence',
+                ai: 'convergence',
+                isBoss: true,
+                skills: [
+                    { id: 'null_burst', name: 'Null Burst', lpDrain: 15, type: 'aoe' },
+                    { id: 'fragment', name: 'Fragment', type: 'summon' }
+                ]
+            },
+            // Act 3 Final Boss
+            assemblage: {
+                name: 'The Assemblage',
+                hp: 300, atk: 20, def: 12, tap: 20, spd: 7,
+                xp: 500, gold: 0,
+                element: ELEMENTS.NONE,
+                cssClass: 'enemy-assemblage',
+                ai: 'assemblage',
+                isBoss: true,
+                isFinalBoss: true,
+                skills: [
+                    { id: 'nineteen_voices', name: 'Nineteen Voices', type: 'aoe', multiplier: 1.2, randomElement: true },
+                    { id: 'it_should_hurt', name: 'It Should Hurt', multiplier: 3.0, element: ELEMENTS.NONE },
+                    { id: 'when_we_scream', name: 'When We Scream', lpDrain: 25, type: 'aoe' }
+                ]
             }
         };
 
@@ -1241,6 +1443,21 @@
             gold: 0,
             lp: STARTING_LP,
             inventory: [],
+
+            // Story progression
+            story: {
+                currentAct: 'prologue',
+                currentScene: 'opening',
+                flags: {
+                    guidedSouls: false,      // Player chose to guide the Frayed souls
+                    ambushedPatrol: false,   // Player chose to ambush vs follow
+                    corraRelationship: 0,    // Relationship modifier
+                    veskRelationship: 0,
+                    echoJoined: false,       // Echo joins party in Act 2
+                    endingChoice: null       // Final choice: 'together' or 'alone'
+                },
+                completedScenes: []
+            },
 
             // Exploration
             playerPos: { x: 0, y: 0 },
@@ -1261,26 +1478,983 @@
             levelUpQueue: []
         };
 
-        // ==================== DIALOG SCRIPTS ====================
-        const introDialog = [
-            { speaker: 'Silas', text: 'The threads grow thin here. Can you feel it?' },
-            { speaker: 'Corra', text: 'The Vein is restless. We should proceed with caution.' },
-            { speaker: 'Silas', text: 'Our party shares a pool of Ley Power - use it wisely.' },
-            { speaker: 'Corra', text: 'Each action in combat follows the turn order based on Speed.' },
-            { speaker: 'Silas', text: 'Strike for physical damage. Tap skills cost LP but are powerful.' },
-            { speaker: 'Corra', text: 'Guard to reduce damage and restore LP to the pool.' },
-            { speaker: 'Silas', text: 'Let\'s move. The creatures of the Hollow Vein await.' }
-        ];
+        // ==================== STORY SCRIPTS ====================
+        const STORY = {
+            // PROLOGUE: The Hum Beneath
+            prologue: {
+                opening: {
+                    location: 'Underground Tunnel',
+                    dialog: [
+                        { speaker: '', text: '*Dripping water. Distant rumble. Green light pulses from the stone walls.*', stage: true },
+                        { speaker: 'Silas', text: 'Third convergence marker. Should be here. Should be—' },
+                        { speaker: '', text: '*Corra emerges from shadows. Her wooden joints creak.*', stage: true },
+                        { speaker: 'Corra', text: 'The Veinwork... shifted. Again. Two hours ago.' },
+                        { speaker: 'Silas', text: 'Resonance Event?' },
+                        { speaker: 'Corra', text: 'Small one. The tunnel we came through—' },
+                        { speaker: 'Silas', text: 'Gone?' },
+                        { speaker: 'Corra', text: '...filled with stone now. Like it was never there.' },
+                        { speaker: '', text: '*Vesk stomps into view, hammer over shoulder, orange eyes cutting through the dark.*', stage: true },
+                        { speaker: 'Vesk', text: 'So we\'re trapped underground because you wanted to chase a rumor. Wonderful.' },
+                        { speaker: 'Silas', text: 'It\'s not a rumor. The Node here—something\'s wrong with it. The Hollow March shouldn\'t know about this place, but they\'re coming. I saw it.' },
+                        { speaker: 'Vesk', text: 'You saw what? More ghosts? More dead men\'s dreams?' },
+                        { speaker: '', text: '*Silas grabs Vesk\'s coat. His grey eyes have gone distant.*', stage: true },
+                        { speaker: 'Silas', text: 'I saw you burn. I saw Corra\'s sigil crack. I saw this place collapse and everything we\'re trying to protect fall into the wrong hands.' },
+                        { speaker: 'Silas', text: 'So we find another way out. And we find the Node before they do.' }
+                    ],
+                    next: 'tutorialBattle'
+                },
+                tutorialBattle: {
+                    location: 'Underground Tunnel',
+                    dialog: [
+                        { speaker: '', text: '*Chittering echoes from the darkness ahead. Green eyes glint in the shadows.*', stage: true },
+                        { speaker: 'Vesk', text: 'Company.' },
+                        { speaker: 'Silas', text: 'Ley-rats. They\'re drawn to raw veinite. Stay sharp.' }
+                    ],
+                    combat: {
+                        enemies: ['leyrat', 'leyrat', 'leyrat'],
+                        isTutorial: true
+                    },
+                    next: 'postTutorial'
+                },
+                postTutorial: {
+                    location: 'Underground Tunnel',
+                    dialog: [
+                        { speaker: 'Vesk', text: 'Vermin this deep. Feeding on raw veinite.' },
+                        { speaker: 'Corra', text: 'The Node... is leaking?' },
+                        { speaker: 'Silas', text: 'Or something\'s drinking from it.' }
+                    ],
+                    next: 'act1_scene1'
+                }
+            },
 
+            // ACT 1: Under the Skin
+            act1: {
+                scene1: {
+                    location: 'The Hollow Vein - Sealed Door',
+                    dialog: [
+                        { speaker: '', text: '*The party reaches a massive iron door marked with Veinkeeper sigils.*', stage: true },
+                        { speaker: 'Vesk', text: 'Veinkeeper seal. Recent.' },
+                        { speaker: 'Corra', text: 'Why would they... seal something in?' },
+                        { speaker: '', text: '*Silas touches the sigils and flinches.*', stage: true },
+                        { speaker: 'Silas', text: 'They\'re not sealing something in. They\'re sealing something out. The Node— they know. They know what\'s happening here and they\'re trying to contain it.' },
+                        { speaker: 'Vesk', text: 'So we break it down?' },
+                        { speaker: 'Silas', text: 'We find whoever set the seal and take their authorization sigil. Quietly.' },
+                        { speaker: 'Corra', text: '...there are Veinkeeper patrols deeper in?' },
+                        { speaker: 'Silas', text: 'I\'m counting on it.' }
+                    ],
+                    next: 'scene2_frayed'
+                },
+                scene2_frayed: {
+                    location: 'The Hollow Vein - Mining Shaft',
+                    dialog: [
+                        { speaker: '', text: '*Shuffling sounds echo from the darkness. Shapes move with jerky, broken motions.*', stage: true },
+                        { speaker: 'Corra', text: 'Wait.' },
+                        { speaker: '', text: '*One of the Cordworks turns. Its painted face is half-scraped away. It reaches toward Corra.*', stage: true },
+                        { speaker: 'Frayed Cordwork', text: '...ribbon... blue ribbon... daughter...?' },
+                        { speaker: '', text: '*Corra\'s hand goes to her neck. To her ribbon.*', stage: true },
+                        { speaker: 'Corra', text: 'I... I don\'t...' },
+                        { speaker: 'Frayed Cordwork', text: '...forgot her name too... we all forget... the Loom takes...' },
+                        { speaker: '', text: '*The Cordwork\'s reaching becomes aggressive.*', stage: true }
+                    ],
+                    combat: {
+                        enemies: ['cordwork', 'cordwork']
+                    },
+                    next: 'scene2_choice'
+                },
+                scene2_choice: {
+                    location: 'The Hollow Vein - Mining Shaft',
+                    dialog: [
+                        { speaker: '', text: '*Corra kneels by the fallen Cordwork.*', stage: true },
+                        { speaker: 'Corra', text: '...how long were you here? Waiting?' },
+                        { speaker: 'Vesk', text: 'Corra. We have to move.' },
+                        { speaker: 'Corra', text: 'They were people.' },
+                        { speaker: 'Vesk', text: 'They were. Now they\'re kindling. That\'s the mercy of it.' },
+                        { speaker: '', text: '*Corra doesn\'t move.*', stage: true },
+                        { speaker: 'Silas', text: 'I can... try something. If there\'s any thread left, I might be able to guide it back to the Loom.' },
+                        { speaker: 'Corra', text: 'You can do that?' },
+                        { speaker: 'Silas', text: 'I could. Three lives ago. The knowledge bleeds through sometimes.' }
+                    ],
+                    choice: {
+                        prompt: 'What do you do?',
+                        options: [
+                            {
+                                title: 'Guide the Souls',
+                                desc: 'Silas performs a ritual. Costs LP. +Relationship with Corra.',
+                                flag: 'guidedSouls',
+                                value: true,
+                                lpCost: 15,
+                                relationship: { corra: 1 },
+                                next: 'scene2_guide'
+                            },
+                            {
+                                title: 'Move On',
+                                desc: 'The party continues. Vesk approves. Corra goes quiet.',
+                                flag: 'guidedSouls',
+                                value: false,
+                                relationship: { vesk: 1 },
+                                next: 'scene2_moveon'
+                            }
+                        ]
+                    }
+                },
+                scene2_guide: {
+                    location: 'The Hollow Vein - Mining Shaft',
+                    dialog: [
+                        { speaker: '', text: '*Silas kneels. His hands trace patterns in the air—muscle memory from a life he doesn\'t remember.*', stage: true },
+                        { speaker: '', text: '*The Cordwork\'s remains glow briefly, then dim. Something rises. Something leaves.*', stage: true },
+                        { speaker: 'Corra', text: 'Thank you.' },
+                        { speaker: 'Silas', text: 'Don\'t thank me. I don\'t know where they\'re going. Just... away from here.' }
+                    ],
+                    next: 'scene3_patrol'
+                },
+                scene2_moveon: {
+                    location: 'The Hollow Vein - Mining Shaft',
+                    dialog: [
+                        { speaker: 'Vesk', text: 'We can mourn later. Or never. Let\'s go.' },
+                        { speaker: '', text: '*Corra stands slowly. Her button eyes don\'t leave the fallen Cordwork until the shadows swallow it.*', stage: true }
+                    ],
+                    next: 'scene3_patrol'
+                },
+                scene3_patrol: {
+                    location: 'The Hollow Vein - Upper Gallery',
+                    dialog: [
+                        { speaker: '', text: '*The party observes a Veinkeeper patrol from hiding.*', stage: true },
+                        { speaker: 'Scout 1', text: '—telling you, the readings are wrong. This Node shouldn\'t be active.' },
+                        { speaker: 'Scout 2', text: 'Warden says contain it. We contain it.' },
+                        { speaker: 'Scout 1', text: 'The Hollow March hit two Nodes this month. What if they\'re already here?' },
+                        { speaker: 'Scout 2', text: 'Then we burn what\'s left.' },
+                        { speaker: '', text: '*They move on.*', stage: true }
+                    ],
+                    choice: {
+                        prompt: 'How do you approach?',
+                        options: [
+                            {
+                                title: 'Ambush',
+                                desc: 'Fight 2 scouts now. Quick but alerts remaining patrols.',
+                                flag: 'ambushedPatrol',
+                                value: true,
+                                next: 'scene4_ambush'
+                            },
+                            {
+                                title: 'Follow',
+                                desc: 'Tail them to patrol base. Harder fight, more rewards.',
+                                flag: 'ambushedPatrol',
+                                value: false,
+                                next: 'scene4_follow'
+                            }
+                        ]
+                    }
+                },
+                scene4_ambush: {
+                    location: 'The Hollow Vein - Upper Gallery',
+                    dialog: [
+                        { speaker: 'Silas', text: 'Quick and quiet. Don\'t let them signal.' }
+                    ],
+                    combat: {
+                        enemies: ['scout', 'scout']
+                    },
+                    next: 'scene4_ambush_post'
+                },
+                scene4_ambush_post: {
+                    location: 'The Hollow Vein - Upper Gallery',
+                    dialog: [
+                        { speaker: '', text: '*Vesk takes the sigil from the fallen scout.*', stage: true },
+                        { speaker: 'Vesk', text: 'Got it.' },
+                        { speaker: '', text: '*Silas checks the scout\'s equipment.*', stage: true },
+                        { speaker: 'Silas', text: 'They were carrying purification charges. Enough to collapse half this tunnel.' },
+                        { speaker: 'Corra', text: 'They were going to destroy the Node?' },
+                        { speaker: 'Silas', text: 'Better that than let the Hollow March have it. That\'s how Veinkeepers think.' }
+                    ],
+                    next: 'boss_approach'
+                },
+                scene4_follow: {
+                    location: 'Veinkeeper Encampment',
+                    dialog: [
+                        { speaker: '', text: '*The party discovers a small Veinkeeper encampment.*', stage: true },
+                        { speaker: 'Silas', text: 'Three scouts. And the Warden\'s tent is—' },
+                        { speaker: '', text: '*The Warden steps from shadows behind them.*', stage: true },
+                        { speaker: 'Warden', text: '—right here.' }
+                    ],
+                    combat: {
+                        enemies: ['scout', 'scout', 'scout', 'warden']
+                    },
+                    next: 'scene4_follow_post'
+                },
+                scene4_follow_post: {
+                    location: 'Veinkeeper Encampment',
+                    dialog: [
+                        { speaker: '', text: '*Silas searches the Warden\'s belongings.*', stage: true },
+                        { speaker: 'Silas', text: 'Reports. The Node\'s been fluctuating for weeks. They don\'t know why.' },
+                        { speaker: 'Corra', text: 'But they were going to destroy it anyway?' },
+                        { speaker: 'Silas', text: '"Purification Protocol." If they can\'t control it, no one can.' },
+                        { speaker: 'Vesk', text: 'Found something else.' },
+                        { speaker: '', text: '*He holds up a map.*', stage: true },
+                        { speaker: 'Vesk', text: 'Hollow March movements. They\'ve been tracking them.' },
+                        { speaker: 'Silas', text: 'Keep it. We might need to know where not to go.' }
+                    ],
+                    next: 'finale_approach'
+                },
+                boss_approach: {
+                    location: 'The Hollow Vein - Sealed Door',
+                    dialog: [
+                        { speaker: '', text: '*The party returns to the sealed door. A figure blocks their path.*', stage: true },
+                        { speaker: 'Warden', text: 'An Awakened. A Burner deserter. And a Cordwork puppet.' },
+                        { speaker: 'Corra', text: 'I\'m not—' },
+                        { speaker: 'Warden', text: 'You\'re all puppets. Every soul in the cycle. The Engineer pulls strings; you dance. The difference is we know. We serve willingly.' },
+                        { speaker: 'Silas', text: 'And the Node? What happens when the Engineer stops paying attention to it?' },
+                        { speaker: 'Warden', text: 'Purification. The Hollow March wants to break the Veinwork. We\'ll deny them the target.' },
+                        { speaker: 'Vesk', text: 'By destroying it yourself?' },
+                        { speaker: 'Warden', text: 'Better us than them.' }
+                    ],
+                    combat: {
+                        enemies: ['warden', 'scout', 'scout'],
+                        isBoss: true
+                    },
+                    next: 'boss_post'
+                },
+                boss_post: {
+                    location: 'The Hollow Vein - Sealed Door',
+                    dialog: [
+                        { speaker: '', text: '*Vesk stands over the Warden\'s body.*', stage: true },
+                        { speaker: 'Vesk', text: 'True believer to the end.' },
+                        { speaker: '', text: '*Silas takes the sigil.*', stage: true },
+                        { speaker: 'Silas', text: 'He wasn\'t wrong. About any of it. The Engineer does pull strings. The system is broken.' },
+                        { speaker: 'Corra', text: 'Then why are we fighting to save the Node?' },
+                        { speaker: 'Silas', text: 'Because breaking it isn\'t the answer. There has to be a third option. There has to be.' }
+                    ],
+                    next: 'finale'
+                },
+                finale_approach: {
+                    location: 'The Hollow Vein - Sealed Door',
+                    dialog: [
+                        { speaker: '', text: '*With the Warden defeated, the sigil opens the massive iron door.*', stage: true }
+                    ],
+                    next: 'finale'
+                },
+                finale: {
+                    location: 'The Corrupted Node',
+                    dialog: [
+                        { speaker: '', text: '*The door opens to reveal the Node chamber—and something is very wrong.*', stage: true },
+                        { speaker: '', text: '*The Node floats in the cavern center. But instead of the usual kaleidoscope of ley colors, it pulses BLACK. Not dark. BLACK. Like a hole in reality.*', stage: true },
+                        { speaker: 'Silas', text: 'That\'s not... Nodes don\'t do that.' },
+                        { speaker: '', text: '*A voice emerges. Not from the Node. From everywhere.*', stage: true },
+                        { speaker: 'Echo', text: '...been waiting... seventeen incarnations... finally found the door again...' },
+                        { speaker: '', text: '*A figure descends from the cavern ceiling. Porcelain. Cracked. Glowing.*', stage: true },
+                        { speaker: 'Echo', text: 'Hello, Silas. You don\'t remember me. But I remember you. I remember everything.' }
+                    ],
+                    next: 'act2_scene1'
+                }
+            },
+
+            // ACT 2: The Voice Before
+            act2: {
+                scene1: {
+                    location: 'The Null Approach',
+                    dialog: [
+                        { speaker: '', text: '[ACT 2: The Voice Before]', stage: true },
+                        { speaker: '', text: '*The party walks through warped terrain. Reality stutters around them.*', stage: true },
+                        { speaker: 'Echo', text: 'The Node isn\'t corrupted. It\'s waking up.' },
+                        { speaker: 'Silas', text: 'Nodes don\'t have consciousness.' },
+                        { speaker: 'Echo', text: 'This one does.' },
+                        { speaker: '', text: '*Beat.*', stage: true },
+                        { speaker: 'Echo', text: 'You gave it one. Three lifetimes ago. Before the Threadwrights. Before the Accord. You were trying to build a sanctuary. A place outside the Loom\'s reach.' },
+                        { speaker: 'Silas', text: 'I don\'t remember—' },
+                        { speaker: 'Echo', text: 'The Loom ate that memory. Every time you cycle, it takes a piece. Eventually there won\'t be enough of you left to remember why you started fighting.' },
+                        { speaker: '', text: '*She stops. Touches Silas\'s face with cold porcelain fingers.*', stage: true },
+                        { speaker: 'Echo', text: 'I was there. I helped you. And when they killed us, I refused the Loom. I held onto the thread. Two hundred years, Silas. Two hundred years waiting for you to find your way back here.' },
+                        { speaker: 'Vesk', text: 'Why? What\'s in the Node?' },
+                        { speaker: 'Echo', text: 'A door. A way to reach the Engineer directly. The Hollow March wants to break the system. The Veinkeepers want to preserve it. But we built a third option.' },
+                        { speaker: 'Corra', text: 'What option?' },
+                        { speaker: 'Echo', text: 'Fix it.' }
+                    ],
+                    next: 'scene2_hollowmarch'
+                },
+                scene2_hollowmarch: {
+                    location: 'The Null Approach - Twisted Path',
+                    dialog: [
+                        { speaker: '', text: '*Party moving through twisted landscape. Sudden ambush.*', stage: true },
+                        { speaker: 'Remnant', text: 'The Porcelain. And the Awakened. The Assemblage was right. They came.' },
+                        { speaker: 'Silas', text: 'The Assemblage is here?' },
+                        { speaker: 'Remnant', text: 'A piece. Enough to stop you. Enough to—' },
+                        { speaker: '', text: '*The Remnant\'s voices conflict. It screams—not in pain, in DISAGREEMENT.*', stage: true },
+                        { speaker: 'Remnant', text: 'Please, we don\'t want to fight—' },
+                        { speaker: 'Remnant', text: 'Weakness. Kill them.' },
+                        { speaker: 'Remnant', text: 'THE NODE. BREAK THE NODE. BREAK—' }
+                    ],
+                    combat: {
+                        enemies: ['remnant', 'remnant', 'ironbound']
+                    },
+                    next: 'scene2_post'
+                },
+                scene2_post: {
+                    location: 'The Null Approach - Twisted Path',
+                    dialog: [
+                        { speaker: 'Corra', text: 'They\'re... suffering.' },
+                        { speaker: 'Echo', text: 'That\'s the Fraying. Too many souls in one frame. Eventually none of them are in charge. Just... noise. Screaming.' },
+                        { speaker: 'Vesk', text: 'Is that what happens to you? Eventually?' },
+                        { speaker: '', text: '*Echo doesn\'t answer.*', stage: true },
+                        { speaker: 'Silas', text: 'Echo—' },
+                        { speaker: 'Echo', text: 'I\'ve held on this long. I\'ll hold on long enough.' },
+                        { speaker: 'Vesk', text: 'Long enough for what?' },
+                        { speaker: 'Echo', text: 'To finish what we started. That\'s all any of us can ask for.' }
+                    ],
+                    next: 'scene3_ribbon'
+                },
+                scene3_ribbon: {
+                    location: 'Ruined Waystation',
+                    dialog: [
+                        { speaker: '', text: '*Party takes shelter in a stable pocket of reality. Ruined structure, once a waystation.*', stage: true },
+                        { speaker: '', text: '*Corra moves through debris. Her ribbon catches on twisted metal. Tears.*', stage: true },
+                        { speaker: 'Corra', text: 'No—!' },
+                        { speaker: '', text: '*She scrambles for the pieces. Her wooden hands shake.*', stage: true },
+                        { speaker: 'Silas', text: 'Corra—' },
+                        { speaker: 'Corra', text: 'This is all I have. This is—I don\'t remember her name anymore, Silas. My daughter\'s name. But I remember she gave me this. I remember her hands tying it. Small hands. Clumsy. I can feel them if I—' },
+                        { speaker: '', text: '*She stops. Her button eyes dim.*', stage: true },
+                        { speaker: 'Corra', text: 'If I close my eyes and don\'t think too hard.' },
+                        { speaker: '', text: '*Echo carefully takes the torn ribbon.*', stage: true },
+                        { speaker: 'Echo', text: 'I can mend this. Porcelain frames were built for delicate work.' },
+                        { speaker: '', text: '*She produces a needle from somewhere in her frame. Begins stitching.*', stage: true },
+                        { speaker: 'Echo', text: 'The ones we lose... we carry them differently as Konstruks. The living get to forget. We don\'t have that mercy. But we don\'t have that curse either.' },
+                        { speaker: 'Corra', text: 'What do you mean?' },
+                        { speaker: 'Echo', text: 'You\'ll never forget that she existed. Even when the details go, the shape of her stays. The Loom can take memories. It can\'t take love.' },
+                        { speaker: '', text: '*She ties off the stitch. Hands the ribbon back.*', stage: true },
+                        { speaker: 'Echo', text: 'Her name was Mira.' },
+                        { speaker: '', text: '*Corra freezes.*', stage: true },
+                        { speaker: 'Corra', text: 'How do you—' },
+                        { speaker: 'Echo', text: 'I remember everyone, Corra. Two hundred years of holding the thread. I remember your daughter. I remember the fever that took her. I remember she asked for her mother at the end.' },
+                        { speaker: '', text: '*Beat.*', stage: true },
+                        { speaker: 'Echo', text: 'She wasn\'t afraid.' },
+                        { speaker: '', text: '*Corra\'s wooden frame shudders. The closest she can come to crying.*', stage: true },
+                        { speaker: 'Corra', text: 'Mira.' },
+                        { speaker: 'Echo', text: 'Mira.' },
+                        { speaker: '', text: '[ECHO JOINS THE PARTY]', stage: true }
+                    ],
+                    onComplete: 'addEcho',
+                    next: 'scene4_approach'
+                },
+                scene4_approach: {
+                    location: 'The Node\'s Boundary',
+                    dialog: [
+                        { speaker: '', text: '*Party nears the Node\'s outer boundary. Reality increasingly unstable.*', stage: true },
+                        { speaker: 'Silas', text: 'We\'re close. I can feel it. The memories are—' },
+                        { speaker: '', text: '*He stumbles.*', stage: true },
+                        { speaker: 'Vesk', text: 'Easy.' },
+                        { speaker: 'Silas', text: 'I built this place. I don\'t remember building it, but my bones remember. The shape of the stones. The angle of the—' },
+                        { speaker: '', text: '*He points to a seemingly random rock formation.*', stage: true },
+                        { speaker: 'Silas', text: 'There\'s a door there. Hidden.' },
+                        { speaker: 'Corra', text: 'I don\'t see anything.' },
+                        { speaker: 'Echo', text: 'He\'s right. Concealed passage. Keyed to Awakened memory patterns.' },
+                        { speaker: 'Vesk', text: 'So only Silas can open it?' },
+                        { speaker: 'Echo', text: 'Only Silas who remembers. Even fragments are enough.' },
+                        { speaker: '', text: '*Silas presses his hand to the stone. His eyes go distant.*', stage: true },
+                        { speaker: 'Silas', text: '"The thread that binds is the thread that frees. Walk through memory to walk through doors."' },
+                        { speaker: '', text: '*The stone shifts. Opens.*', stage: true },
+                        { speaker: 'Silas', text: 'I don\'t know where that came from.' },
+                        { speaker: 'Echo', text: 'Three lifetimes ago. You said it to me the day we finished building this place.' },
+                        { speaker: 'Silas', text: 'Did I believe it?' },
+                        { speaker: 'Echo', text: 'You believed it enough to die for it.' }
+                    ],
+                    next: 'scene5_wisps'
+                },
+                scene5_wisps: {
+                    location: 'Node Outer Chamber',
+                    dialog: [
+                        { speaker: '', text: '*Inside the Node\'s outer chambers. Wisps coalesce from ambient energy.*', stage: true },
+                        { speaker: 'Echo', text: 'The Node is aware of us. These are... antibodies. It\'s confused.' },
+                        { speaker: 'Silas', text: 'Confused about what?' },
+                        { speaker: 'Echo', text: 'Whether we\'re intruders or the builders returning home.' },
+                        { speaker: '', text: '*Wisps pulse aggressively.*', stage: true }
+                    ],
+                    combat: {
+                        enemies: ['wisp', 'wisp', 'wisp']
+                    },
+                    next: 'scene5_post'
+                },
+                scene5_post: {
+                    location: 'Node Outer Chamber',
+                    dialog: [
+                        { speaker: '', text: '*After victory, more wisps appear but hold back.*', stage: true },
+                        { speaker: 'Corra', text: 'They\'re not attacking.' },
+                        { speaker: 'Echo', text: 'They\'re watching. The Node is learning. Deciding.' },
+                        { speaker: 'Silas', text: 'We\'re not here to hurt you. I made you. I think. I\'m trying to remember.' },
+                        { speaker: '', text: '*The wisps pulse—uncertain—then part, opening a path.*', stage: true },
+                        { speaker: 'Vesk', text: 'Did that just work?' },
+                        { speaker: 'Silas', text: 'Don\'t question it. Move.' }
+                    ],
+                    next: 'boss_convergence'
+                },
+                boss_convergence: {
+                    location: 'Node Inner Chamber',
+                    dialog: [
+                        { speaker: '', text: '*Approaching the Node\'s inner chamber, the party faces the manifestation of the Node\'s awakening consciousness.*', stage: true },
+                        { speaker: 'Echo', text: 'The Node is... panicking. It\'s been dormant so long. It doesn\'t understand what it is.' },
+                        { speaker: 'Silas', text: 'We have to calm it. Make it recognize us.' },
+                        { speaker: 'Vesk', text: 'Calm a Node? How?' },
+                        { speaker: 'Silas', text: 'I remember. I remember something...' },
+                        { speaker: '', text: '*The Node pulses. Wisps coalesce into a massive form—humanoid but wrong, features shifting, too many eyes.*', stage: true }
+                    ],
+                    combat: {
+                        enemies: ['convergence'],
+                        isBoss: true
+                    },
+                    next: 'boss_post'
+                },
+                boss_post: {
+                    location: 'Node Inner Chamber',
+                    dialog: [
+                        { speaker: '', text: '*The Convergence dissolves. The Node\'s light shifts—recognition.*', stage: true },
+                        { speaker: 'Silas', text: 'I built you. I don\'t remember building you, but my hands know the shape. Let us in.' },
+                        { speaker: '', text: '*The Node pulses—acceptance. The inner chamber begins to open.*', stage: true },
+                        { speaker: '', text: '*Then an explosion rocks the cavern.*', stage: true },
+                        { speaker: 'Assemblage', text: 'YOU CANNOT HIDE FROM US, ARCHITECT.' },
+                        { speaker: 'Assemblage', text: 'WE REMEMBER WHAT YOU DID.' },
+                        { speaker: 'Assemblage', text: 'WE REMEMBER WHAT YOU PROMISED.' },
+                        { speaker: '', text: '*A massive form crashes through the cavern wall. Reliquary-class. Ancient. Terrible. A patchwork of ceramic and metal and bone, nineteen faces embedded across its surface.*', stage: true },
+                        { speaker: 'Assemblage', text: 'You promised to free us. You LIED.' }
+                    ],
+                    next: 'act3_scene1'
+                }
+            },
+
+            // ACT 3: The Fraying Thread
+            act3: {
+                scene1: {
+                    location: 'The Heart - Memory of the Workshop',
+                    dialog: [
+                        { speaker: '', text: '[ACT 3: The Fraying Thread]', stage: true },
+                        { speaker: '', text: '*Party steps through the Node\'s threshold. Reality ripples. They stand in a different place—a workshop, centuries old, tools gleaming.*', stage: true },
+                        { speaker: '', text: '*Silas—different body, same grey eyes—stands before a young woman.*', stage: true },
+                        { speaker: 'Past Silas', text: 'The Loom is broken. The Engineer knows. It\'s been eating souls, not recycling them. Feeding on consciousness to maintain the Veinwork.' },
+                        { speaker: 'Elara', text: 'Then we stop it. We build our own Loom. One that doesn\'t consume.' },
+                        { speaker: 'Past Silas', text: 'The Veinkeepers will never allow—' },
+                        { speaker: 'Elara', text: 'The Veinkeepers serve a machine that eats people. I don\'t care what they allow.' },
+                        { speaker: '', text: '*She takes his hands. Her grip is fierce.*', stage: true },
+                        { speaker: 'Elara', text: 'We build the door. We walk through. We make the Engineer see.' },
+                        { speaker: '', text: '*Memory dissolves. Workshop fragments into light.*', stage: true },
+                        { speaker: 'Silas', text: 'I remember her now. Not Echo. Before. When she was—' },
+                        { speaker: 'Echo', text: 'Elara. My name was Elara.' },
+                        { speaker: 'Silas', text: 'Why didn\'t you tell me?' },
+                        { speaker: 'Echo', text: 'Would you have believed me? Or would it have been one more ghost, one more bleedthrough you couldn\'t trust?' },
+                        { speaker: 'Silas', text: 'I...' },
+                        { speaker: 'Echo', text: 'You trusted me because I earned it. Not because I claimed a past you don\'t remember.' },
+                        { speaker: '', text: '*The ground shakes. Distant crash.*', stage: true },
+                        { speaker: 'Vesk', text: 'It\'s still coming.' },
+                        { speaker: 'Echo', text: 'Then we keep moving.' }
+                    ],
+                    next: 'scene2_vesk'
+                },
+                scene2_vesk: {
+                    location: 'The Heart - Memory of Fire',
+                    dialog: [
+                        { speaker: '', text: '*Memory shifts. Party walks through flame.*', stage: true },
+                        { speaker: '', text: '*A village burns. Vesk—younger, in pristine Veinkeeper uniform—watches. His face is sick.*', stage: true },
+                        { speaker: 'Past Vesk', text: 'This is wrong. They\'re not doing anything.' },
+                        { speaker: 'Commander', text: 'They\'re Loom-Blind. Aberrations. The Engineer has no use for souls it can\'t process.' },
+                        { speaker: 'Past Vesk', text: 'They\'re people.' },
+                        { speaker: 'Commander', text: 'They\'re fuel that won\'t burn. Useless. This is mercy.' },
+                        { speaker: '', text: '*Past Vesk\'s hand moves to his weapon.*', stage: true },
+                        { speaker: 'Past Vesk', text: 'No. This is murder.' },
+                        { speaker: '', text: '*Memory freezes. Fire suspended mid-flicker.*', stage: true },
+                        { speaker: 'Vesk', text: 'I killed him. Didn\'t save a single one of them, but I killed him.' },
+                        { speaker: 'Silas', text: 'Vesk—' },
+                        { speaker: 'Vesk', text: 'Keep moving. We\'re being followed.' },
+                        { speaker: 'Corra', text: 'You tried.' },
+                        { speaker: 'Vesk', text: 'Trying doesn\'t bring back the dead.' },
+                        { speaker: 'Echo', text: 'No. But it\'s why you\'re here. Why you\'re still fighting. That has to count.' }
+                    ],
+                    next: 'scene3_mira'
+                },
+                scene3_mira: {
+                    location: 'The Heart - Memory of Mira',
+                    dialog: [
+                        { speaker: '', text: '*Final memory before the core. The Node\'s light softens. A small room. Worn furniture. A child in bed—thin, pale, eyes too bright.*', stage: true },
+                        { speaker: '', text: '*Corra—human, living, young—holds the child\'s hand.*', stage: true },
+                        { speaker: 'Mira', text: 'Mama, don\'t cry.' },
+                        { speaker: 'Past Corra', text: 'I\'m not, sweetheart. I\'m not crying.' },
+                        { speaker: 'Mira', text: 'Liar.' },
+                        { speaker: '', text: '*She presses a blue ribbon into Corra\'s hand.*', stage: true },
+                        { speaker: 'Mira', text: 'Keep this, okay? So you remember.' },
+                        { speaker: 'Past Corra', text: 'Remember what?' },
+                        { speaker: 'Mira', text: 'That I loved you. Even when you forget everything else... remember that someone loved you.' },
+                        { speaker: '', text: '*Memory fades. Light dims.*', stage: true },
+                        { speaker: '', text: '*Present Corra stands frozen. Echo takes her wooden hand.*', stage: true },
+                        { speaker: 'Echo', text: 'She entered the cycle. She\'s been reborn. I don\'t know where, but she\'s out there, Corra. Living a new life.' },
+                        { speaker: 'Corra', text: 'She won\'t remember me.' },
+                        { speaker: 'Echo', text: 'No. But maybe that\'s okay. Maybe loving someone means letting them move on.' },
+                        { speaker: '', text: '*Corra\'s grip tightens on the ribbon.*', stage: true },
+                        { speaker: 'Corra', text: 'Mira.' }
+                    ],
+                    next: 'scene4_confrontation'
+                },
+                scene4_confrontation: {
+                    location: 'The Heart - Node Core Threshold',
+                    dialog: [
+                        { speaker: '', text: '*Party reaches threshold of the Node\'s core. The Assemblage crashes through behind them—too fast, too close.*', stage: true },
+                        { speaker: 'Assemblage', text: '—promised to free us—' },
+                        { speaker: 'Assemblage', text: '—we waited for so long—' },
+                        { speaker: 'Assemblage', text: '—you built this place and then you DIED—' },
+                        { speaker: 'Assemblage', text: '—IT SHOULD HURT WHEN WE SCREAM—' },
+                        { speaker: 'Silas', text: 'I know. I know I failed you. I\'m sorry.' },
+                        { speaker: 'Assemblage', text: 'SORRY DOESN\'T—' },
+                        { speaker: 'Silas', text: 'But I\'m here now. And I remember enough. The third option—the door to the Engineer—it\'s not about breaking the system. It\'s about showing the Engineer what it\'s doing.' },
+                        { speaker: 'Assemblage', text: 'THE ENGINEER DOESN\'T CARE.' },
+                        { speaker: 'Echo', text: 'Maybe not. But we do. And that has to count for something.' },
+                        { speaker: 'Assemblage', text: '...you really think it can be fixed?' },
+                        { speaker: 'Silas', text: 'I have to believe it can. Seventeen lives, and I\'ve never stopped believing that.' },
+                        { speaker: 'Assemblage', text: 'THEN WHY SHOULD WE LET YOU TRY? WHY SHOULD WE TRUST THE ARCHITECT WHO ABANDONED US?' },
+                        { speaker: 'Silas', text: 'Because you\'re still here. Still fighting. Still holding on. That means some part of you believes too.' },
+                        { speaker: '', text: '*The Assemblage trembles—internal conflict.*', stage: true },
+                        { speaker: 'Assemblage', text: '—kill them—' },
+                        { speaker: 'Assemblage', text: '—let them through—' },
+                        { speaker: 'Assemblage', text: '—please, just let it end—' },
+                        { speaker: 'Assemblage', text: 'WE CANNOT AGREE. SO WE WILL LET COMBAT DECIDE.' }
+                    ],
+                    combat: {
+                        enemies: ['assemblage'],
+                        isBoss: true,
+                        isFinalBoss: true
+                    },
+                    next: 'boss_aftermath'
+                },
+                boss_aftermath: {
+                    location: 'The Heart - Node Core',
+                    dialog: [
+                        { speaker: '', text: '*The Assemblage falls. Its form dissolves. Nineteen voices separate into individual whispers.*', stage: true },
+                        { speaker: 'Voice', text: '...I was a farmer...' },
+                        { speaker: 'Voice', text: '...I had a son...' },
+                        { speaker: 'Voice', text: '...I\'m so tired...' },
+                        { speaker: 'Voice', text: '...is it over...?' },
+                        { speaker: '', text: '*One by one, the souls begin to drift upward. Toward the Node\'s core.*', stage: true },
+                        { speaker: 'Silas', text: 'The door. It\'s opening.' },
+                        { speaker: '', text: '*The Node pulses—not black anymore, but white. Pure. A threshold.*', stage: true },
+                        { speaker: 'Corra', text: 'What do we do?' },
+                        { speaker: 'Echo', text: 'We walk through. We show the Engineer what it\'s been doing. All the pain. All the Fraying. All the souls it\'s consumed without understanding.' },
+                        { speaker: 'Vesk', text: 'Will it listen?' },
+                        { speaker: 'Echo', text: 'I don\'t know. But I\'ve spent two hundred years holding onto this thread. I have to believe it matters.' },
+                        { speaker: '', text: '*She looks at the party. At Silas.*', stage: true },
+                        { speaker: 'Echo', text: 'I won\'t ask you to come with me. This was always my door to open.' },
+                        { speaker: 'Silas', text: 'I built it with you. I\'m not letting you walk through alone.' },
+                        { speaker: 'Corra', text: 'We\'ve come this far.' },
+                        { speaker: 'Vesk', text: 'Always wanted to punch a god.' },
+                        { speaker: '', text: '*Echo laughs—the first genuine laugh she\'s made all game.*', stage: true },
+                        { speaker: 'Echo', text: 'That\'s not quite what we\'re doing.' },
+                        { speaker: 'Vesk', text: 'Let me have this.' }
+                    ],
+                    choice: {
+                        prompt: 'The door stands open. What do you do?',
+                        options: [
+                            {
+                                title: 'Enter the Door — Together',
+                                desc: 'The party steps through as one. United in purpose.',
+                                flag: 'endingChoice',
+                                value: 'together',
+                                next: 'ending_together'
+                            },
+                            {
+                                title: 'Stay Behind',
+                                desc: 'Silas enters alone, ensuring the others\' safety.',
+                                flag: 'endingChoice',
+                                value: 'alone',
+                                next: 'ending_alone'
+                            }
+                        ]
+                    }
+                },
+                ending_together: {
+                    location: 'Beyond the Door',
+                    dialog: [
+                        { speaker: '', text: '*They walked into the light together.*', stage: true },
+                        { speaker: '', text: '[EPILOGUE]', stage: true },
+                        { speaker: '', text: '*The Engineer listened.*', stage: true },
+                        { speaker: '', text: '*It didn\'t understand, at first—it had never been asked to understand before. But they showed it. Every memory. Every loss. Every soul that had screamed into the void while the system processed them like data.*', stage: true },
+                        { speaker: '', text: '*Silas showed it seventeen lives of trying.*', stage: true },
+                        { speaker: '', text: '*Corra showed it a daughter\'s last gift.*', stage: true },
+                        { speaker: '', text: '*Vesk showed it a village that burned for nothing.*', stage: true },
+                        { speaker: '', text: '*Echo showed it two hundred years of holding on.*', stage: true },
+                        { speaker: '', text: '*The Loom began to change.*', stage: true },
+                        { speaker: '', text: '*It would take years. Decades. Maybe centuries. But the Fraying slowed. The cycle softened. Souls began to pass through whole instead of being consumed.*', stage: true },
+                        { speaker: '', text: '*And somewhere, in a village at the edge of the Veinwork, a child named Mira woke from a dream about a woman with a blue ribbon, and smiled for reasons she couldn\'t explain.*', stage: true },
+                        { speaker: '', text: '[THE END]', stage: true },
+                        { speaker: '', text: 'Thank you for playing The Loom of Ashveld.', stage: true }
+                    ],
+                    next: 'credits'
+                },
+                ending_alone: {
+                    location: 'The Threshold',
+                    dialog: [
+                        { speaker: '', text: '*Silas steps toward the light. Turns back.*', stage: true },
+                        { speaker: 'Silas', text: 'Keep each other safe. And if this works—if the Loom changes—' },
+                        { speaker: 'Echo', text: 'We\'ll know.' },
+                        { speaker: 'Silas', text: 'Tell them about the third option. Tell everyone.' },
+                        { speaker: '', text: '*He walks into the light.*', stage: true },
+                        { speaker: '', text: '[EPILOGUE]', stage: true },
+                        { speaker: '', text: '*Silas walked into the light alone.*', stage: true },
+                        { speaker: '', text: '*The others waited. Hours. Days. They lost track.*', stage: true },
+                        { speaker: '', text: '*When the Node finally dimmed, Silas didn\'t return. But the Veinwork... quieted. The Hum softened. Across Ashveld, Konstruks reported something strange: for the first time in memory, the voices in their heads weren\'t screaming.*', stage: true },
+                        { speaker: '', text: '*Echo found a message carved into the Node\'s surface. Silas\'s handwriting—but older. Steadier.*', stage: true },
+                        { speaker: '', text: '*"Keep holding the thread. I\'m fixing it from the inside."*', stage: true },
+                        { speaker: '', text: '*She traced the words with porcelain fingers.*', stage: true },
+                        { speaker: '', text: '*And she waited.*', stage: true },
+                        { speaker: '', text: '[THE END]', stage: true },
+                        { speaker: '', text: 'Thank you for playing The Loom of Ashveld.', stage: true }
+                    ],
+                    next: 'credits'
+                },
+                credits: {
+                    location: '',
+                    dialog: [
+                        { speaker: '', text: '*The Thread continues...*', stage: true },
+                        { speaker: 'Nineteen Voices', text: 'Thank you.' },
+                        { speaker: '', text: '[CREDITS]', stage: true },
+                        { speaker: '', text: 'THE LOOM OF ASHVELD', stage: true },
+                        { speaker: '', text: 'A story about memory, loss, and holding on.', stage: true }
+                    ],
+                    next: 'end'
+                }
+            }
+        };
+
+        // Legacy dialog for demo end
         const allClearedDialog = [
             { speaker: 'Corra', text: 'The area is clear. We\'ve done well.' },
-            { speaker: 'Silas', text: 'But this is only the beginning. The Node calls to us still.' },
-            { speaker: 'Corra', text: 'Thank you for playing this demo of The Loom of Ashveld.' }
+            { speaker: 'Silas', text: 'But this is only the beginning. The Node calls to us still.' }
         ];
+
+        // ==================== STORY SYSTEM ====================
+        function getScene(sceneId) {
+            // Handle cross-act references
+            if (sceneId.startsWith('act1_')) {
+                return STORY.act1[sceneId.replace('act1_', '')];
+            }
+            if (sceneId.startsWith('act2_')) {
+                game.story.currentAct = 'act2';
+                return STORY.act2[sceneId.replace('act2_', '')];
+            }
+            if (sceneId.startsWith('act3_')) {
+                game.story.currentAct = 'act3';
+                return STORY.act3[sceneId.replace('act3_', '')];
+            }
+            // Check current act first
+            const act = game.story.currentAct;
+            if (STORY[act] && STORY[act][sceneId]) {
+                return STORY[act][sceneId];
+            }
+            // Check act3 for scenes
+            if (STORY.act3 && STORY.act3[sceneId]) {
+                game.story.currentAct = 'act3';
+                return STORY.act3[sceneId];
+            }
+            // Check act2 for scenes
+            if (STORY.act2 && STORY.act2[sceneId]) {
+                game.story.currentAct = 'act2';
+                return STORY.act2[sceneId];
+            }
+            // Check act1 for all other scenes
+            if (STORY.act1[sceneId]) {
+                game.story.currentAct = 'act1';
+                return STORY.act1[sceneId];
+            }
+            return null;
+        }
+
+        function addEchoToParty() {
+            // Check if Echo is already in party
+            if (game.party.some(c => c.id === 'echo')) return;
+
+            const template = CHARACTER_TEMPLATES.echo;
+            const echo = {
+                id: 'echo',
+                name: template.name,
+                role: template.role,
+                element: template.element,
+                skills: [...template.skills],
+                level: game.partyLevel,
+                maxHp: template.baseStats.hp + (template.growth.hp * (game.partyLevel - 1)),
+                atk: template.baseStats.atk + (template.growth.atk * (game.partyLevel - 1)),
+                def: template.baseStats.def + (template.growth.def * (game.partyLevel - 1)),
+                tap: template.baseStats.tap + (template.growth.tap * (game.partyLevel - 1)),
+                spd: template.baseStats.spd + (template.growth.spd * (game.partyLevel - 1)),
+                currentHp: template.baseStats.hp + (template.growth.hp * (game.partyLevel - 1)),
+                alive: true,
+                statusEffects: []
+            };
+            game.party.push(echo);
+            game.story.flags.echoJoined = true;
+        }
+
+        function playScene(sceneId) {
+            const scene = getScene(sceneId);
+            if (!scene) {
+                console.error('Scene not found:', sceneId);
+                return;
+            }
+
+            game.story.currentScene = sceneId;
+
+            // Update location display
+            const locationEl = document.getElementById('scene-location');
+            if (scene.location) {
+                locationEl.textContent = scene.location;
+                locationEl.classList.add('active');
+            } else {
+                locationEl.classList.remove('active');
+            }
+
+            // Play dialog, then handle combat/choice/next
+            showStoryDialog(scene.dialog, () => {
+                // Handle onComplete callbacks
+                if (scene.onComplete === 'addEcho') {
+                    addEchoToParty();
+                }
+
+                if (scene.combat) {
+                    startStoryCombat(scene.combat, sceneId);
+                } else if (scene.choice) {
+                    showChoice(scene.choice, sceneId);
+                } else if (scene.next) {
+                    if (scene.next === 'end') {
+                        // End of current content
+                        switchToExploration();
+                    } else {
+                        playScene(scene.next);
+                    }
+                }
+            });
+        }
+
+        function showStoryDialog(dialog, callback) {
+            game.dialogQueue = [...dialog];
+            game.dialogCallback = callback;
+            game.dialogIndex = 0;
+
+            // Hide choice container
+            document.getElementById('choice-container').classList.remove('active');
+
+            const line = dialog[0];
+            updateDialogDisplay(line);
+
+            game.currentScene = 'dialog';
+            document.getElementById('dialog-scene').classList.add('active');
+            document.getElementById('exploration-scene').style.display = 'none';
+            document.getElementById('combat-scene').style.display = 'none';
+        }
+
+        function updateDialogDisplay(line) {
+            const speakerEl = document.getElementById('dialog-speaker');
+            const textEl = document.getElementById('dialog-text');
+            const continueEl = document.getElementById('dialog-continue');
+
+            if (line.stage) {
+                // Stage direction
+                speakerEl.textContent = '';
+                textEl.innerHTML = `<span class="stage-direction">${line.text}</span>`;
+            } else {
+                speakerEl.textContent = line.speaker;
+                textEl.textContent = line.text;
+            }
+            continueEl.style.display = 'block';
+
+            // Update sprite labels based on who's speaking
+            updateSpriteDisplay(line.speaker);
+        }
+
+        function updateSpriteDisplay(speaker) {
+            const leftLabel = document.querySelector('#sprite-left .dialog-sprite-label');
+            const rightLabel = document.querySelector('#sprite-right .dialog-sprite-label');
+            const leftSprite = document.getElementById('sprite-left');
+            const rightSprite = document.getElementById('sprite-right');
+
+            // Default characters on each side
+            leftLabel.textContent = 'Silas';
+            rightLabel.textContent = 'Corra';
+
+            // Dim non-speaking sprites
+            leftSprite.style.opacity = speaker === 'Silas' ? '1' : '0.6';
+            rightSprite.style.opacity = speaker === 'Corra' ? '1' : '0.6';
+
+            // Handle other speakers
+            if (speaker === 'Vesk') {
+                rightLabel.textContent = 'Vesk';
+                rightSprite.style.opacity = '1';
+                leftSprite.style.opacity = '0.6';
+                rightSprite.style.background = 'linear-gradient(to bottom, #f97316 0%, #ea580c 100%)';
+            } else if (speaker === 'Echo') {
+                rightLabel.textContent = 'Echo';
+                rightSprite.style.opacity = '1';
+                leftSprite.style.opacity = '0.6';
+                rightSprite.style.background = 'linear-gradient(to bottom, #22d3ee 0%, #06b6d4 100%)';
+            } else if (speaker === 'Warden' || speaker === 'Scout 1' || speaker === 'Scout 2') {
+                rightLabel.textContent = speaker;
+                rightSprite.style.opacity = '1';
+                leftSprite.style.opacity = '0.6';
+                rightSprite.style.background = 'linear-gradient(to bottom, #ef4444 0%, #b91c1c 100%)';
+            } else if (speaker === 'Frayed Cordwork') {
+                rightLabel.textContent = 'Frayed';
+                rightSprite.style.opacity = '1';
+                leftSprite.style.opacity = '0.6';
+                rightSprite.style.background = 'linear-gradient(to bottom, #a855f7 0%, #7c3aed 100%)';
+            } else if (speaker === 'Remnant') {
+                rightLabel.textContent = 'Remnant';
+                rightSprite.style.opacity = '1';
+                leftSprite.style.opacity = '0.6';
+                rightSprite.style.background = 'linear-gradient(to bottom, #8b5cf6 0%, #6d28d9 100%)';
+            } else if (speaker === 'Assemblage' || speaker === 'Nineteen Voices') {
+                rightLabel.textContent = speaker === 'Assemblage' ? 'ASSEMBLAGE' : 'NINETEEN';
+                rightSprite.style.opacity = '1';
+                leftSprite.style.opacity = '0.6';
+                rightSprite.style.background = 'linear-gradient(to bottom, #dc2626 0%, #7f1d1d 100%)';
+            } else if (speaker === 'Voice') {
+                rightLabel.textContent = '???';
+                rightSprite.style.opacity = '1';
+                leftSprite.style.opacity = '0.6';
+                rightSprite.style.background = 'linear-gradient(to bottom, #4b5563 0%, #1f2937 100%)';
+            } else if (speaker === 'Elara' || speaker === 'Past Silas') {
+                // Memory sequence - workshop characters
+                leftLabel.textContent = speaker === 'Past Silas' ? 'Silas' : 'Elara';
+                leftSprite.style.opacity = speaker === 'Past Silas' ? '1' : '0.6';
+                rightLabel.textContent = speaker === 'Elara' ? 'Elara' : 'Silas';
+                rightSprite.style.opacity = speaker === 'Elara' ? '1' : '0.6';
+                rightSprite.style.background = 'linear-gradient(to bottom, #fbbf24 0%, #d97706 100%)';
+            } else if (speaker === 'Past Vesk' || speaker === 'Commander') {
+                // Memory sequence - burning village
+                leftLabel.textContent = speaker === 'Past Vesk' ? 'Vesk' : 'Commander';
+                leftSprite.style.opacity = speaker === 'Past Vesk' ? '1' : '0.6';
+                rightLabel.textContent = speaker === 'Commander' ? 'Commander' : 'Vesk';
+                rightSprite.style.opacity = speaker === 'Commander' ? '1' : '0.6';
+                rightSprite.style.background = 'linear-gradient(to bottom, #ef4444 0%, #b91c1c 100%)';
+            } else if (speaker === 'Past Corra' || speaker === 'Mira') {
+                // Memory sequence - Corra's room
+                leftLabel.textContent = speaker === 'Past Corra' ? 'Corra' : 'Mira';
+                leftSprite.style.opacity = speaker === 'Past Corra' ? '1' : '0.6';
+                rightLabel.textContent = speaker === 'Mira' ? 'Mira' : 'Corra';
+                rightSprite.style.opacity = speaker === 'Mira' ? '1' : '0.6';
+                rightSprite.style.background = 'linear-gradient(to bottom, #f472b6 0%, #db2777 100%)';
+            } else if (speaker === 'Corra') {
+                rightSprite.style.background = 'linear-gradient(to bottom, #a78bfa 0%, #7c3aed 100%)';
+            } else {
+                // Reset to default Corra color when no specific speaker
+                rightSprite.style.background = 'linear-gradient(to bottom, #22c55e 0%, #15803d 100%)';
+            }
+
+            // Hide sprites for stage directions
+            if (!speaker) {
+                leftSprite.style.opacity = '0.4';
+                rightSprite.style.opacity = '0.4';
+            }
+        }
+
+        function showChoice(choiceData, currentSceneId) {
+            const container = document.getElementById('choice-container');
+            container.innerHTML = '';
+
+            // Hide the continue prompt
+            document.getElementById('dialog-continue').style.display = 'none';
+
+            choiceData.options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'choice-btn';
+                btn.innerHTML = `
+                    <div class="choice-title">${option.title}</div>
+                    <div class="choice-desc">${option.desc}</div>
+                `;
+                btn.onclick = () => selectChoice(option, currentSceneId);
+                container.appendChild(btn);
+            });
+
+            container.classList.add('active');
+        }
+
+        function selectChoice(option, currentSceneId) {
+            // Apply choice consequences
+            if (option.flag) {
+                game.story.flags[option.flag] = option.value;
+            }
+
+            if (option.lpCost) {
+                game.lp = Math.max(0, game.lp - option.lpCost);
+            }
+
+            if (option.relationship) {
+                for (const [char, mod] of Object.entries(option.relationship)) {
+                    const key = char + 'Relationship';
+                    if (game.story.flags[key] !== undefined) {
+                        game.story.flags[key] += mod;
+                    }
+                }
+            }
+
+            // Hide choice UI
+            document.getElementById('choice-container').classList.remove('active');
+
+            // Continue to next scene
+            if (option.next) {
+                playScene(option.next);
+            }
+        }
+
+        function startStoryCombat(combatData, currentSceneId) {
+            game.currentScene = 'combat';
+            game.combatActive = true;
+            game.combatTurnCount = 0;
+            game.pendingSceneId = currentSceneId;
+
+            // Reset combat stats
+            game.party.forEach(char => {
+                char.guarding = false;
+                char.damageDealt = 0;
+                char.healingDone = 0;
+            });
+
+            // Initialize enemies from template names
+            game.enemies = combatData.enemies.map((templateName, i) => {
+                const template = ENEMY_TEMPLATES[templateName];
+                return {
+                    ...template,
+                    id: i,
+                    combatId: i,
+                    currentHp: template.hp,
+                    maxHp: template.hp,
+                    statusEffects: [],
+                    guarding: false,
+                    turnCounter: 0
+                };
+            });
+
+            // Store combat data for post-combat scene progression
+            game.currentCombatData = combatData;
+
+            buildTurnOrder();
+            updateCombatUI();
+            showCombatScene();
+
+            if (combatData.isBoss) {
+                combatLog.textContent = 'BOSS BATTLE!';
+            } else if (combatData.isTutorial) {
+                combatLog.textContent = 'Tutorial Battle - Learn the basics!';
+            } else {
+                combatLog.textContent = 'Battle begins!';
+            }
+
+            setTimeout(() => processNextTurn(), 800);
+        }
+
+        function onStoryCombatEnd(victory) {
+            if (victory) {
+                // Get the current scene to find the next scene
+                const scene = getScene(game.pendingSceneId);
+                if (scene && scene.next) {
+                    setTimeout(() => playScene(scene.next), 500);
+                }
+            } else {
+                // On defeat, restart from current scene
+                setTimeout(() => playScene(game.pendingSceneId), 500);
+            }
+        }
 
         // ==================== INITIALIZATION ====================
         function initParty() {
-            game.party = ['silas', 'corra', 'vesk', 'echo'].map(id => {
+            // Start with Silas, Corra, Vesk - Echo joins in Act 2
+            game.party = ['silas', 'corra', 'vesk'].map(id => {
                 const template = CHARACTER_TEMPLATES[id];
                 return {
                     id,
@@ -1618,6 +2792,74 @@
                     }
                     return { action: 'strike', target: highestTap };
 
+                case 'warden':
+                    // Boss AI: Judgment on highest damage dealer, Purity Protocol to buff allies
+                    enemy.turnCounter = (enemy.turnCounter || 0) + 1;
+                    // Use Purity Protocol every 3rd turn if there are ally enemies
+                    const allyEnemies = game.enemies.filter(e => e !== enemy && e.currentHp > 0);
+                    if (enemy.turnCounter % 3 === 0 && allyEnemies.length > 0 && enemy.skills) {
+                        return { action: 'skill', skill: enemy.skills[1], target: null, special: 'Purity Protocol' };
+                    }
+                    // Use Judgment on highest threat
+                    if (enemy.skills) {
+                        return { action: 'skill', skill: enemy.skills[0], target: highestThreat };
+                    }
+                    return { action: 'strike', target: highestThreat };
+
+                case 'ironbound':
+                    // Heavy hitter - uses Siege Blow every 2nd turn
+                    enemy.turnCounter = (enemy.turnCounter || 0) + 1;
+                    if (enemy.turnCounter % 2 === 0 && enemy.skills) {
+                        return { action: 'skill', skill: enemy.skills[0], target: randomTarget };
+                    }
+                    return { action: 'strike', target: randomTarget };
+
+                case 'remnant':
+                    // Chaotic - Soul Scream on party when HP < 50%, else random attacks
+                    if (enemy.currentHp < enemy.maxHp * 0.5 && enemy.skills) {
+                        return { action: 'skill', skill: enemy.skills[0], target: null, special: 'Soul Scream' };
+                    }
+                    return { action: 'strike', target: randomTarget };
+
+                case 'horror':
+                    // Uses Memory Drown on highest TAP to disable casters
+                    enemy.turnCounter = (enemy.turnCounter || 0) + 1;
+                    if (enemy.turnCounter % 2 === 0 && enemy.skills) {
+                        return { action: 'skill', skill: enemy.skills[0], target: highestTap, special: 'Memory Drown' };
+                    }
+                    return { action: 'strike', target: highestThreat };
+
+                case 'convergence':
+                    // Boss - alternates between Null Burst (LP drain) and attacks
+                    enemy.turnCounter = (enemy.turnCounter || 0) + 1;
+                    if (enemy.turnCounter % 3 === 1 && enemy.skills) {
+                        return { action: 'skill', skill: enemy.skills[0], target: null, special: 'Null Burst' };
+                    }
+                    return { action: 'strike', target: highestThreat };
+
+                case 'assemblage':
+                    // Final Boss - complex pattern based on HP thresholds
+                    enemy.turnCounter = (enemy.turnCounter || 0) + 1;
+                    const hpPercent = enemy.currentHp / enemy.maxHp;
+
+                    // Phase 2 at 50% HP - more aggressive
+                    if (hpPercent <= 0.5 && !enemy.phase2) {
+                        enemy.phase2 = true;
+                    }
+
+                    // Cycle through abilities
+                    if (enemy.turnCounter % 4 === 1 && enemy.skills) {
+                        // Nineteen Voices - AoE attack
+                        return { action: 'skill', skill: enemy.skills[0], target: null, special: 'Nineteen Voices' };
+                    } else if (enemy.turnCounter % 4 === 2 && enemy.skills) {
+                        // When We Scream - LP drain
+                        return { action: 'skill', skill: enemy.skills[2], target: null, special: 'When We Scream' };
+                    } else if (enemy.turnCounter % 4 === 0 && enemy.skills) {
+                        // It Should Hurt - massive single target
+                        return { action: 'skill', skill: enemy.skills[1], target: highestThreat };
+                    }
+                    return { action: 'strike', target: randomTarget };
+
                 default:
                     return { action: 'strike', target: randomTarget };
             }
@@ -1916,6 +3158,9 @@
             game.combatActive = false;
             disablePlayerActions();
 
+            // Check if this is a story combat
+            const isStoryCombat = game.pendingSceneId !== undefined;
+
             setTimeout(() => {
                 const resultEl = document.getElementById('combat-result');
                 const resultText = document.getElementById('result-text');
@@ -1933,9 +3178,11 @@
                     let totalGold = 0;
 
                     game.enemies.forEach(enemy => {
-                        // Mark map enemy as defeated
-                        const mapEnemy = game.mapEnemies.find(e => e.id === enemy.id);
-                        if (mapEnemy) mapEnemy.alive = false;
+                        // Mark map enemy as defeated (only for exploration combat)
+                        if (!isStoryCombat) {
+                            const mapEnemy = game.mapEnemies.find(e => e.id === enemy.id);
+                            if (mapEnemy) mapEnemy.alive = false;
+                        }
 
                         // XP formula: Enemy HP * 0.5 * level modifier
                         const baseXP = Math.floor(enemy.maxHp * 0.5);
@@ -1955,7 +3202,7 @@
                     resultText.textContent = 'DEFEAT';
                     resultText.className = 'defeat';
                     rewardsText.textContent = '';
-                    xpGainEl.textContent = '';
+                    xpGainEl.textContent = 'Retrying...';
 
                     // Restore party HP on defeat
                     game.party.forEach(char => {
@@ -1964,6 +3211,10 @@
                         char.statusEffects = [];
                     });
                 }
+
+                // Store victory state for continue button
+                game.lastCombatVictory = victory;
+                game.lastCombatWasStory = isStoryCombat;
             }, 600);
         }
 
@@ -2448,9 +3699,12 @@
             game.dialogCallback = callback;
             game.dialogIndex = 0;
 
+            // Hide choice container and scene location
+            document.getElementById('choice-container').classList.remove('active');
+            document.getElementById('scene-location').classList.remove('active');
+
             const line = game.dialogQueue[0];
-            document.getElementById('dialog-speaker').textContent = line.speaker;
-            document.getElementById('dialog-text').textContent = line.text;
+            updateDialogDisplay(line);
 
             game.currentScene = 'dialog';
             document.getElementById('dialog-scene').classList.add('active');
@@ -2459,6 +3713,11 @@
         }
 
         function advanceDialog() {
+            // Don't advance if choice is active
+            if (document.getElementById('choice-container').classList.contains('active')) {
+                return;
+            }
+
             game.dialogIndex++;
 
             if (game.dialogIndex >= game.dialogQueue.length) {
@@ -2470,8 +3729,7 @@
             }
 
             const line = game.dialogQueue[game.dialogIndex];
-            document.getElementById('dialog-speaker').textContent = line.speaker;
-            document.getElementById('dialog-text').textContent = line.text;
+            updateDialogDisplay(line);
         }
 
         function switchToExploration() {
@@ -2661,8 +3919,8 @@
             initInventory();
             game.lp = STARTING_LP;
 
-            // Start with intro dialog
-            showDialog(introDialog, switchToExploration);
+            // Start with the Prologue
+            playScene('opening');
 
             // Dialog handlers
             const dialogScene = document.getElementById('dialog-scene');
@@ -2712,6 +3970,11 @@
 
                 if (game.levelUpQueue.length > 0) {
                     showNextLevelUp();
+                } else if (game.lastCombatWasStory) {
+                    // Story combat - continue story progression
+                    onStoryCombatEnd(game.lastCombatVictory);
+                    game.pendingSceneId = undefined;
+                    game.lastCombatWasStory = false;
                 } else if (game.mapEnemies.every(e => !e.alive)) {
                     showDialog(allClearedDialog, switchToExploration);
                 } else {
