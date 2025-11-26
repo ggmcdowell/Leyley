@@ -649,6 +649,11 @@
             color: #fff;
             border: 2px solid #5b21b6;
         }
+        #item-btn {
+            background: linear-gradient(to bottom, #22c55e, #16a34a);
+            color: #fff;
+            border: 2px solid #15803d;
+        }
         .skill-cost {
             font-size: 9px;
             display: block;
@@ -724,6 +729,43 @@
             cursor: not-allowed;
         }
         .skill-select-btn .skill-lp {
+            font-size: 9px;
+            opacity: 0.8;
+        }
+
+        /* Item Selection */
+        #item-selection {
+            display: none;
+            text-align: center;
+        }
+        #item-selection.active {
+            display: block;
+        }
+        #item-label {
+            color: #22c55e;
+            font-size: 12px;
+            margin-bottom: 6px;
+        }
+        #item-buttons {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .item-select-btn {
+            padding: 8px 12px;
+            font-size: 11px;
+            background: linear-gradient(to bottom, #16a34a, #15803d);
+            color: #fff;
+            border: 2px solid #166534;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .item-select-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .item-select-btn .item-qty {
             font-size: 9px;
             opacity: 0.8;
         }
@@ -925,6 +967,7 @@
                 <div id="combat-actions">
                     <button id="strike-btn" class="combat-btn">Strike</button>
                     <button id="skill-btn" class="combat-btn">Tap<span class="skill-cost">LP varies</span></button>
+                    <button id="item-btn" class="combat-btn">Item</button>
                     <button id="guard-btn" class="combat-btn">Guard</button>
                 </div>
                 <div id="target-selection">
@@ -934,6 +977,10 @@
                 <div id="skill-selection">
                     <div id="skill-label">Select skill</div>
                     <div id="skill-buttons"></div>
+                </div>
+                <div id="item-selection">
+                    <div id="item-label">Select item</div>
+                    <div id="item-buttons"></div>
                 </div>
             </div>
             <div id="combat-result">
@@ -1025,6 +1072,123 @@
             }
         };
 
+        // ==================== ITEM DEFINITIONS ====================
+        const ITEM_DEFINITIONS = {
+            // Healing Items
+            vital_salve: {
+                id: 'vital_salve',
+                name: 'Vital Salve',
+                description: 'Restore 30 HP to one ally',
+                type: 'heal_single',
+                value: 30,
+                target: 'ally',
+                cost: 50
+            },
+            vital_draught: {
+                id: 'vital_draught',
+                name: 'Vital Draught',
+                description: 'Restore 60 HP to one ally',
+                type: 'heal_single',
+                value: 60,
+                target: 'ally',
+                cost: 120
+            },
+            mending_thread: {
+                id: 'mending_thread',
+                name: 'Mending Thread',
+                description: 'Revive incapacitated ally with 25% HP',
+                type: 'revive',
+                value: 0.25,
+                target: 'dead_ally',
+                cost: 200
+            },
+            vital_surge: {
+                id: 'vital_surge',
+                name: 'Vital Surge',
+                description: 'Restore 40 HP to all allies',
+                type: 'heal_all',
+                value: 40,
+                target: 'all_allies',
+                cost: 300
+            },
+            // Ley Items
+            ley_shard: {
+                id: 'ley_shard',
+                name: 'Ley Shard',
+                description: 'Restore 20 LP',
+                type: 'lp_restore',
+                value: 20,
+                target: 'party',
+                cost: 40
+            },
+            veinite_fragment: {
+                id: 'veinite_fragment',
+                name: 'Veinite Fragment',
+                description: 'Restore 50 LP',
+                type: 'lp_restore',
+                value: 50,
+                target: 'party',
+                cost: 100
+            },
+            tap_booster: {
+                id: 'tap_booster',
+                name: 'Tap Booster',
+                description: 'Next ley skill costs 0 LP',
+                type: 'buff',
+                effect: 'free_tap',
+                duration: 1,
+                target: 'ally',
+                cost: 150
+            },
+            // Battle Items
+            thermal_flask: {
+                id: 'thermal_flask',
+                name: 'Thermal Flask',
+                description: 'Deal 25 Thermal damage to one enemy',
+                type: 'damage',
+                value: 25,
+                element: ELEMENTS.THERMAL,
+                target: 'enemy',
+                cost: 60
+            },
+            aether_spike: {
+                id: 'aether_spike',
+                name: 'Aether Spike',
+                description: 'Deal 25 Aetheric damage to one enemy',
+                type: 'damage',
+                value: 25,
+                element: ELEMENTS.AETHERIC,
+                target: 'enemy',
+                cost: 60
+            },
+            vital_thorn: {
+                id: 'vital_thorn',
+                name: 'Vital Thorn',
+                description: 'Deal 25 Vital damage to one enemy',
+                type: 'damage',
+                value: 25,
+                element: ELEMENTS.VITAL,
+                target: 'enemy',
+                cost: 60
+            },
+            smoke_pellet: {
+                id: 'smoke_pellet',
+                name: 'Smoke Pellet',
+                description: 'Escape from non-boss battle',
+                type: 'escape',
+                target: 'none',
+                cost: 30
+            },
+            clear_tonic: {
+                id: 'clear_tonic',
+                name: 'Clear Tonic',
+                description: 'Remove status effects from one ally',
+                type: 'cleanse',
+                target: 'ally',
+                cost: 80
+            }
+        };
+
         // ==================== ENEMY DEFINITIONS ====================
         const ENEMY_TEMPLATES = {
             leyrat: {
@@ -1076,6 +1240,7 @@
             partyXP: 0,
             gold: 0,
             lp: STARTING_LP,
+            inventory: [],
 
             // Exploration
             playerPos: { x: 0, y: 0 },
@@ -1089,6 +1254,7 @@
             enemies: [],
             pendingAction: null,
             selectedSkill: null,
+            selectedItem: null,
             combatTurnCount: 0,
 
             // Level up queue
@@ -1133,6 +1299,45 @@
                     alive: true
                 };
             });
+        }
+
+        function initInventory() {
+            // Starting items for the adventure
+            game.inventory = [
+                { itemId: 'vital_salve', quantity: 3 },
+                { itemId: 'ley_shard', quantity: 2 },
+                { itemId: 'smoke_pellet', quantity: 1 }
+            ];
+        }
+
+        function getInventoryItem(itemId) {
+            return game.inventory.find(i => i.itemId === itemId);
+        }
+
+        function addItem(itemId, quantity = 1) {
+            const existing = getInventoryItem(itemId);
+            if (existing) {
+                existing.quantity += quantity;
+            } else {
+                game.inventory.push({ itemId, quantity });
+            }
+        }
+
+        function removeItem(itemId, quantity = 1) {
+            const existing = getInventoryItem(itemId);
+            if (existing) {
+                existing.quantity -= quantity;
+                if (existing.quantity <= 0) {
+                    game.inventory = game.inventory.filter(i => i.itemId !== itemId);
+                }
+                return true;
+            }
+            return false;
+        }
+
+        function hasItem(itemId) {
+            const item = getInventoryItem(itemId);
+            return item && item.quantity > 0;
         }
 
         function initMapEnemies() {
@@ -1297,11 +1502,20 @@
         }
 
         function performSkill(caster, skill, target) {
-            if (game.lp < skill.lpCost) {
+            // Check for free_tap buff (from Tap Booster item)
+            const hasFreeTap = caster.statusEffects?.find(s => s.effect === 'free_tap');
+            const actualCost = hasFreeTap ? 0 : skill.lpCost;
+
+            if (game.lp < actualCost) {
                 return { success: false, message: 'Not enough LP!' };
             }
 
-            game.lp -= skill.lpCost;
+            game.lp -= actualCost;
+
+            // Remove free_tap buff after use
+            if (hasFreeTap) {
+                caster.statusEffects = caster.statusEffects.filter(s => s.effect !== 'free_tap');
+            }
 
             switch (skill.type) {
                 case 'damage': {
@@ -1528,20 +1742,24 @@
 
             const strikeBtn = document.getElementById('strike-btn');
             const skillBtn = document.getElementById('skill-btn');
+            const itemBtn = document.getElementById('item-btn');
             const guardBtn = document.getElementById('guard-btn');
 
             strikeBtn.disabled = false;
             skillBtn.disabled = false;
+            itemBtn.disabled = false;
             guardBtn.disabled = false;
 
             hideTargetSelection();
             hideSkillSelection();
+            hideItemSelection();
             showMainActions();
         }
 
         function disablePlayerActions() {
             document.getElementById('strike-btn').disabled = true;
             document.getElementById('skill-btn').disabled = true;
+            document.getElementById('item-btn').disabled = true;
             document.getElementById('guard-btn').disabled = true;
         }
 
@@ -1869,6 +2087,7 @@
                         case 'def_down': icon = '⬇'; color = '#f97316'; break;
                         case 'weakness_revealed': icon = '👁'; color = '#fbbf24'; break;
                         case 'interpose': icon = '🛡'; color = '#22c55e'; break;
+                        case 'free_tap': icon = '✦'; color = '#a855f7'; break;
                     }
                     statusHtml += `<div class="status-icon" style="background:${color}">${icon}</div>`;
                 });
@@ -1913,6 +2132,7 @@
             document.getElementById('combat-actions').style.display = 'flex';
             document.getElementById('target-selection').classList.remove('active');
             document.getElementById('skill-selection').classList.remove('active');
+            document.getElementById('item-selection').classList.remove('active');
         }
 
         function hideMainActions() {
@@ -1997,6 +2217,191 @@
         function hideSkillSelection() {
             document.getElementById('skill-selection').classList.remove('active');
             showMainActions();
+        }
+
+        function showItemSelection(character) {
+            hideMainActions();
+            const container = document.getElementById('item-buttons');
+            container.innerHTML = '';
+
+            // Get items that can be used in combat
+            const usableItems = game.inventory.filter(inv => {
+                const itemDef = ITEM_DEFINITIONS[inv.itemId];
+                return itemDef && inv.quantity > 0;
+            });
+
+            if (usableItems.length === 0) {
+                const noItems = document.createElement('div');
+                noItems.style.color = '#888';
+                noItems.style.marginBottom = '10px';
+                noItems.textContent = 'No items available';
+                container.appendChild(noItems);
+            }
+
+            usableItems.forEach(inv => {
+                const itemDef = ITEM_DEFINITIONS[inv.itemId];
+                const btn = document.createElement('button');
+                btn.className = 'item-select-btn';
+                btn.innerHTML = `${itemDef.name}<br><span class="item-qty">x${inv.quantity}</span>`;
+
+                // Check if item can be used (e.g., revive needs dead ally)
+                let canUse = true;
+                if (itemDef.target === 'dead_ally') {
+                    canUse = game.party.some(c => !c.alive);
+                }
+                btn.disabled = !canUse;
+
+                btn.onclick = () => {
+                    game.selectedItem = itemDef;
+                    hideItemSelection();
+
+                    // Determine valid targets based on item type
+                    if (itemDef.target === 'enemy') {
+                        const targets = game.enemies.filter(e => e.currentHp > 0);
+                        showTargetSelection(targets, (target) => executePlayerItem(itemDef, target));
+                    } else if (itemDef.target === 'ally') {
+                        const targets = game.party.filter(c => c.alive);
+                        showTargetSelection(targets, (target) => executePlayerItem(itemDef, target));
+                    } else if (itemDef.target === 'dead_ally') {
+                        const targets = game.party.filter(c => !c.alive);
+                        showTargetSelection(targets, (target) => executePlayerItem(itemDef, target));
+                    } else {
+                        // party, all_allies, none - no target selection needed
+                        executePlayerItem(itemDef, null);
+                    }
+                };
+                container.appendChild(btn);
+            });
+
+            const cancelBtn = document.createElement('button');
+            cancelBtn.className = 'item-select-btn';
+            cancelBtn.style.background = 'linear-gradient(to bottom, #6b7280, #4b5563)';
+            cancelBtn.textContent = 'Cancel';
+            cancelBtn.onclick = () => {
+                hideItemSelection();
+                enablePlayerActions(character);
+            };
+            container.appendChild(cancelBtn);
+
+            document.getElementById('item-selection').classList.add('active');
+        }
+
+        function hideItemSelection() {
+            document.getElementById('item-selection').classList.remove('active');
+            showMainActions();
+        }
+
+        function executePlayerItem(item, target) {
+            disablePlayerActions();
+            hideItemSelection();
+            hideTargetSelection();
+
+            const current = game.turnOrder[game.currentTurnIndex];
+            const user = current.entity;
+
+            // Remove item from inventory
+            removeItem(item.id);
+
+            let logMsg = `${user.name} uses ${item.name}`;
+
+            switch (item.type) {
+                case 'heal_single': {
+                    const actualHeal = Math.min(item.value, target.maxHp - target.currentHp);
+                    target.currentHp += actualHeal;
+                    logMsg += ` - ${target.name} healed for ${actualHeal}!`;
+                    showFloatingNumber(target, actualHeal, 'heal');
+                    break;
+                }
+
+                case 'heal_all': {
+                    let totalHeal = 0;
+                    game.party.forEach(char => {
+                        if (char.alive) {
+                            const actualHeal = Math.min(item.value, char.maxHp - char.currentHp);
+                            char.currentHp += actualHeal;
+                            totalHeal += actualHeal;
+                        }
+                    });
+                    logMsg += ` - Party healed for ${totalHeal}!`;
+                    break;
+                }
+
+                case 'revive': {
+                    target.alive = true;
+                    target.currentHp = Math.floor(target.maxHp * item.value);
+                    target.statusEffects = [];
+                    logMsg += ` - ${target.name} revived with ${target.currentHp} HP!`;
+                    showFloatingNumber(target, target.currentHp, 'heal');
+                    break;
+                }
+
+                case 'lp_restore': {
+                    const actualRestore = Math.min(item.value, MAX_LP - game.lp);
+                    game.lp += actualRestore;
+                    logMsg += ` - Restored ${actualRestore} LP!`;
+                    // Show on current character
+                    showFloatingNumber(user, actualRestore, 'lp');
+                    break;
+                }
+
+                case 'buff': {
+                    if (item.effect === 'free_tap') {
+                        applyStatusEffect(target, 'free_tap', item.duration, user.name);
+                        logMsg += ` on ${target.name} - Next Tap skill is free!`;
+                    }
+                    break;
+                }
+
+                case 'damage': {
+                    // Calculate damage with elemental modifier
+                    let damage = item.value;
+                    const elemMod = getElementModifier(item.element, target.element);
+                    damage = Math.floor(damage * elemMod);
+
+                    if (target.guarding) {
+                        damage = Math.floor(damage * GUARD_DAMAGE_MULT);
+                    }
+
+                    target.currentHp = Math.max(0, target.currentHp - damage);
+                    logMsg += ` on ${target.name} for ${damage} damage!`;
+                    if (elemMod > 1) logMsg += ' Super effective!';
+                    showFloatingNumber(target, damage, 'damage');
+                    flashElement(getEnemyElement(target.combatId));
+                    break;
+                }
+
+                case 'escape': {
+                    // Check if it's a boss battle
+                    const isBoss = game.enemies.some(e => e.isBoss);
+                    if (isBoss) {
+                        logMsg += ' - Cannot escape from boss battle!';
+                        // Refund the item
+                        addItem(item.id);
+                    } else {
+                        logMsg += ' - Party escaped!';
+                        combatLog.textContent = logMsg;
+                        updateCombatUI();
+                        setTimeout(() => {
+                            game.combatActive = false;
+                            switchToExploration();
+                        }, 800);
+                        return;
+                    }
+                    break;
+                }
+
+                case 'cleanse': {
+                    target.statusEffects = [];
+                    logMsg += ` - ${target.name}'s status effects cleared!`;
+                    break;
+                }
+            }
+
+            combatLog.textContent = logMsg;
+            updateCombatUI();
+
+            game.currentTurnIndex++;
+            setTimeout(() => processNextTurn(), 800);
         }
 
         function showFloatingNumber(entity, value, type) {
@@ -2253,6 +2658,7 @@
             // Initialize game
             initParty();
             initMapEnemies();
+            initInventory();
             game.lp = STARTING_LP;
 
             // Start with intro dialog
@@ -2288,6 +2694,13 @@
                 const current = game.turnOrder[game.currentTurnIndex];
                 if (current && current.type === 'party') {
                     showSkillSelection(current.entity);
+                }
+            });
+
+            document.getElementById('item-btn').addEventListener('click', () => {
+                const current = game.turnOrder[game.currentTurnIndex];
+                if (current && current.type === 'party') {
+                    showItemSelection(current.entity);
                 }
             });
 
