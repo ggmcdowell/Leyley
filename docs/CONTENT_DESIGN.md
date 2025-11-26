@@ -571,3 +571,298 @@ The Frayed Cordworks shuffle through the dark. Abandoned when the mine closed. W
 -----
 
 *End Part 2*
+
+---
+
+## Part 3: Act 2
+
+-----
+
+# ACT 2: The Voice Before
+
+**Runtime: ~15-20 minutes**
+
+-----
+
+## Setting: The Null Approach
+
+*Territory surrounding the corrupted Node*
+
+The area around the corrupted Node has become a Null Zone in reverse. Instead of magic failing, it *amplifies*. Uncontrollably. Plants grow in seconds, then rot. Stone flows like water. Time skips—party members find themselves mid-sentence, words they don't remember starting.
+
+The Hollow March has scouts here. They've noticed the anomaly. They want it.
+
+-----
+
+## Scene 1: Echo's Explanation
+
+*Party walks through warped terrain. Reality stutters around them.*
+
+**ECHO:** (walking with party) The Node isn't corrupted. It's *waking up*.
+
+**SILAS:** Nodes don't have consciousness.
+
+**ECHO:** This one does.
+
+*Beat.*
+
+**ECHO:** You gave it one. Three lifetimes ago. Before the Threadwrights. Before the Accord. You were trying to build a sanctuary. A place outside the Loom's reach.
+
+**SILAS:** I don't remember—
+
+**ECHO:** The Loom *ate* that memory. Every time you cycle, it takes a piece. Eventually there won't be enough of you left to remember why you started fighting.
+
+*She stops. Touches Silas's face with cold porcelain fingers.*
+
+**ECHO:** I was there. I helped you. And when they killed us, I refused the Loom. I held onto the thread. Two hundred years, Silas. Two hundred years waiting for you to find your way back here.
+
+**VESK:** Why? What's in the Node?
+
+**ECHO:** A door. A way to reach the Engineer directly. The Hollow March wants to break the system. The Veinkeepers want to preserve it. But we built a third option.
+
+**CORRA:** What option?
+
+**ECHO:** *Fix it.*
+
+-----
+
+## Scene 2: The Hollow March
+
+*Party moving through twisted landscape. Sudden ambush.*
+
+**HOLLOW MARCH REMNANT:** (speaking in three voices) The Porcelain. And the Awakened. The Assemblage was right. They came.
+
+**SILAS:** The Assemblage is here?
+
+**REMNANT:** A piece. Enough to stop you. Enough to—
+
+*The Remnant's voices conflict. It screams—not in pain, in DISAGREEMENT. Multiple souls fighting for control.*
+
+**REMNANT:** (one voice, young, terrified) Please, we don't want to fight—
+
+**REMNANT:** (another voice, cold) Weakness. Kill them.
+
+**REMNANT:** (third voice) THE NODE. BREAK THE NODE. BREAK—
+
+**[BATTLE: Hollow March Remnant x2 + Ironbound Deserter]**
+
+-----
+
+### Post-Battle Dialogue
+
+**CORRA:** They're… suffering.
+
+**ECHO:** That's the Fraying. Too many souls in one frame. Eventually none of them are in charge. Just… noise. Screaming.
+
+**VESK:** Is that what happens to you? Eventually?
+
+*Echo doesn't answer.*
+
+**SILAS:** Echo—
+
+**ECHO:** (cutting him off) I've held on this long. I'll hold on long enough.
+
+**VESK:** Long enough for what?
+
+**ECHO:** To finish what we started. That's all any of us can ask for.
+
+-----
+
+## Scene 3: Corra's Ribbon
+
+*Party takes shelter in a stable pocket of reality. Ruined structure, once a waystation.*
+
+*Corra moves through debris. Her ribbon catches on twisted metal. Tears.*
+
+**CORRA:** No—!
+
+*She scrambles for the pieces. Her wooden hands shake.*
+
+**SILAS:** Corra—
+
+**CORRA:** This is all I have. This is—I don't remember her *name* anymore, Silas. My daughter's name. But I remember she gave me this. I remember her *hands* tying it. Small hands. Clumsy. I can feel them if I—
+
+*She stops. Her button eyes dim.*
+
+**CORRA:** If I close my eyes and don't think too hard.
+
+**ECHO:** (carefully taking the torn ribbon) I can mend this. Porcelain frames were built for delicate work.
+
+*She produces a needle from somewhere in her frame. Begins stitching.*
+
+**ECHO:** The ones we lose… we carry them differently as Konstruks. The living get to forget. We don't have that mercy. But we don't have that curse either.
+
+**CORRA:** What do you mean?
+
+**ECHO:** You'll never forget that she *existed*. Even when the details go, the shape of her stays. The Loom can take memories. It can't take love.
+
+*She ties off the stitch. Hands the ribbon back.*
+
+**ECHO:** Her name was Mira.
+
+*Corra freezes.*
+
+**CORRA:** How do you—
+
+**ECHO:** I remember everyone, Corra. Two hundred years of holding the thread. I remember your daughter. I remember the fever that took her. I remember she asked for her mother at the end.
+
+*Beat.*
+
+**ECHO:** She wasn't afraid.
+
+*Corra's wooden frame shudders. The closest she can come to crying.*
+
+**CORRA:** Mira.
+
+**ECHO:** Mira.
+
+**[ECHO OFFICIALLY JOINS PARTY]**
+
+-----
+
+## Scene 4: The Approach
+
+*Party nears the Node's outer boundary. Reality increasingly unstable.*
+
+**SILAS:** We're close. I can feel it. The memories are— (he stumbles) —stronger here.
+
+**VESK:** (catching him) Easy.
+
+**SILAS:** I built this place. I don't remember building it, but my bones remember. The shape of the stones. The angle of the—
+
+*He points to a seemingly random rock formation.*
+
+**SILAS:** There's a door there. Hidden.
+
+**CORRA:** I don't see anything.
+
+**ECHO:** (pressing her crystalline eye to the formation) He's right. Concealed passage. Keyed to Awakened memory patterns.
+
+**VESK:** So only Silas can open it?
+
+**ECHO:** Only Silas who *remembers*. Even fragments are enough.
+
+*Silas presses his hand to the stone. His eyes go distant.*
+
+**SILAS:** (voice layered, older) "The thread that binds is the thread that frees. Walk through memory to walk through doors."
+
+*The stone shifts. Opens.*
+
+**SILAS:** (normal voice, shaken) I don't know where that came from.
+
+**ECHO:** Three lifetimes ago. You said it to me the day we finished building this place.
+
+**SILAS:** Did I believe it?
+
+**ECHO:** You believed it enough to die for it.
+
+-----
+
+## Scene 5: Node Wisp Encounters
+
+*Inside the Node's outer chambers. Wisps coalesce from ambient energy.*
+
+**ECHO:** The Node is aware of us. These are… antibodies. It's confused.
+
+**SILAS:** Confused about what?
+
+**ECHO:** Whether we're intruders or the builders returning home.
+
+*Wisps pulse aggressively.*
+
+**[BATTLE: Node Wisp x3]**
+
+*After victory, more wisps appear but hold back.*
+
+**CORRA:** They're not attacking.
+
+**ECHO:** They're *watching*. The Node is learning. Deciding.
+
+**SILAS:** (to the wisps) We're not here to hurt you. I made you. I think. I'm trying to remember.
+
+*The wisps pulse—uncertain—then part, opening a path.*
+
+**VESK:** Did that just work?
+
+**SILAS:** Don't question it. Move.
+
+-----
+
+## Act 2 Boss: Node Wisp Convergence
+
+*Approaching the Node's inner chamber, the party faces the manifestation of the Node's awakening consciousness.*
+
+**ECHO:** The Node is… panicking. It's been dormant so long. It doesn't understand what it is.
+
+**SILAS:** We have to calm it. Make it recognize us.
+
+**VESK:** Calm a *Node*? How?
+
+**SILAS:** (closing his eyes) I remember. I remember *something*…
+
+*The Node pulses. Wisps coalesce into a massive form—humanoid but wrong, features shifting, too many eyes.*
+
+**[BOSS BATTLE: Node Wisp Convergence]**
+
+**Battle Note:** The Convergence is actually 3 Node Wisps that combine into an Awakened Horror if all three aren't defeated within a short window of each other. Strategy requires managing damage across all three.
+
+-----
+
+### Post-Boss: Recognition
+
+*The Convergence dissolves. The Node's light shifts—recognition.*
+
+**SILAS:** (pressing palms to the Node's surface) I built you. I don't remember building you, but my hands know the shape. Let us in.
+
+*The Node pulses—acceptance. The inner chamber begins to open.*
+
+*Then an explosion rocks the cavern.*
+
+**ASSEMBLAGE (FRAGMENT):** (nineteen voices, booming from above)
+
+YOU CANNOT HIDE FROM US, ARCHITECT.
+
+WE REMEMBER WHAT YOU DID.
+
+WE REMEMBER WHAT YOU PROMISED.
+
+*A massive form crashes through the cavern wall. Reliquary-class. Ancient. Terrible. A patchwork of ceramic and metal and bone, nineteen faces embedded across its surface.*
+
+**ASSEMBLAGE:** You promised to free us. You *lied*.
+
+**[END ACT 2]**
+
+-----
+
+## Act 2 Encounters Summary
+
+|Encounter                                   |Type |Location     |
+|--------------------------------------------|-----|-------------|
+|Hollow March Remnant x2 + Ironbound Deserter|Story|Scene 2      |
+|Node Wisp x3                                |Story|Scene 5      |
+|Node Wisp Convergence (→ Awakened Horror)   |Boss |Inner Chamber|
+
+## Act 2 Key Story Beats
+
+|Beat              |Characters |Significance                                                     |
+|------------------|-----------|-----------------------------------------------------------------|
+|Echo's Revelation |Echo, Silas|Establishes their shared past; the Node is a door to the Engineer|
+|Corra's Ribbon    |Corra, Echo|Echo reveals daughter's name (Mira); deepest emotional moment    |
+|Echo Joins        |All        |Party complete                                                   |
+|Memory Door       |Silas      |His fragmented memories have practical use                       |
+|Node Recognition  |Silas, Node|The Node accepts him as its creator                              |
+|Assemblage Arrival|All        |Act 2 cliffhanger; the past comes calling                        |
+
+## Act 2 Character Development
+
+**Silas:** Begins accepting that his past lives weren't just baggage—they built something meaningful. Starts trusting the knowledge he doesn't consciously remember.
+
+**Corra:** Finally learns her daughter's name. Begins processing grief she's been holding for eight years. Connection with Echo deepens.
+
+**Vesk:** Sees Konstruks as people more clearly. His question to Echo ("Is that what happens to you?") shows growing concern for non-human allies.
+
+**Echo:** Reveals her true history. Shows vulnerability beneath the calm exterior. Her refusal to answer Vesk's question hints at her fears.
+
+-----
+
+*End Part 3*
