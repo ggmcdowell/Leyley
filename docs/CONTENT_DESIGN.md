@@ -253,3 +253,321 @@ This isn't the full Assemblage—that horror would end you in moments. This is a
 -----
 
 *End Part 1*
+
+---
+
+## Part 2: Prologue + Act 1
+
+-----
+
+# PROLOGUE: The Hum Beneath
+
+**Runtime: ~5 minutes | Tutorial Segment**
+
+-----
+
+## Opening Scene
+
+**[FADE IN — UNDERGROUND TUNNEL]**
+
+*Dripping water. Distant rumble. Silas presses his palm against rough stone. Green light pulses beneath his fingers—veinite, close to the surface.*
+
+**SILAS:** (muttering) Third convergence marker. Should be here. Should be—
+
+*Corra emerges from shadows behind him. Her wooden joints creak.*
+
+**CORRA:** The Veinwork… shifted. Again. Two hours ago.
+
+**SILAS:** Resonance Event?
+
+**CORRA:** Small one. The tunnel we came through—
+
+**SILAS:** Gone?
+
+*Corra's button eyes somehow convey apology.*
+
+**CORRA:** …filled with stone now. Like it was never there.
+
+*Vesk stomps into frame, hammer over shoulder, orange eyes cutting through the dark.*
+
+**VESK:** So we're trapped underground because you wanted to chase a rumor. Wonderful.
+
+**SILAS:** It's not a rumor. The Node here—something's *wrong* with it. The Hollow March shouldn't know about this place, but they're coming. I saw it. Seventeen lifetimes of memory and I *saw*—
+
+**VESK:** You saw what? More ghosts? More dead men's dreams?
+
+*Silas grabs Vesk's coat. His grey eyes have gone distant.*
+
+**SILAS:** I saw you burn. I saw Corra's sigil crack. I saw this place collapse and everything we're trying to protect fall into the wrong hands.
+
+*Beat.*
+
+**SILAS:** So we find another way out. And we find the Node before they do.
+
+-----
+
+## Tutorial Battle: Ley-Rat Swarm x3
+
+**[BATTLE START]**
+
+*System introduces core mechanics through this encounter.*
+
+**Post-Victory Dialogue:**
+
+**VESK:** Vermin this deep. Feeding on raw veinite.
+
+**CORRA:** The Node… is leaking?
+
+**SILAS:** Or something's drinking from it.
+
+-----
+
+# ACT 1: Under the Skin
+
+**Runtime: ~15-20 minutes**
+
+-----
+
+## Setting: The Hollow Vein
+
+*An abandoned mining complex*
+
+The Hollow Vein was a veinite mine before the Resonance Event sealed it. Now it's a tomb. Collapsed tunnels. Rusted equipment. The walls pulse with green-blue light where exposed ley conduits bleed into open air. Some passages fill with raw ley mist—beautiful, toxic, tasting of copper and lightning.
+
+The Frayed Cordworks shuffle through the dark. Abandoned when the mine closed. Waiting for masters who never returned.
+
+-----
+
+## Scene 1: The Sealed Door
+
+*Party reaches a massive iron door marked with Veinkeeper sigils.*
+
+**VESK:** Veinkeeper seal. Recent.
+
+**CORRA:** Why would they… seal something *in*?
+
+**SILAS:** (touching the sigils, flinching) They're not sealing something in. They're sealing something *out*. The Node— they know. They know what's happening here and they're trying to contain it.
+
+**VESK:** So we break it down?
+
+**SILAS:** We find whoever set the seal and take their authorization sigil. Quietly.
+
+**CORRA:** …there are Veinkeeper patrols deeper in?
+
+**SILAS:** I'm counting on it.
+
+-----
+
+## Scene 2: The Frayed
+
+*Party encounters group of Frayed Cordworks.*
+
+**CORRA:** (stopping the party) Wait.
+
+*One of the Cordworks turns. Its painted face is half-scraped away. It reaches toward Corra.*
+
+**FRAYED CORDWORK:** (static-filled voice) …ribbon… blue ribbon… daughter…?
+
+*Corra's hand goes to her neck. To her ribbon.*
+
+**CORRA:** I… I don't…
+
+**FRAYED CORDWORK:** …forgot her name too… we all forget… the Loom takes…
+
+*The Cordwork's reaching becomes aggressive.*
+
+**[BATTLE: Frayed Cordwork x2]**
+
+-----
+
+### Post-Battle: The Mercy Choice
+
+**CORRA:** (kneeling by the fallen Cordwork) …how long were you here? Waiting?
+
+**VESK:** Corra. We have to move.
+
+**CORRA:** They were *people*.
+
+**VESK:** They were. Now they're kindling. That's the mercy of it.
+
+*Corra doesn't move.*
+
+**SILAS:** (quietly) I can… try something. If there's any thread left, I might be able to guide it back to the Loom.
+
+**CORRA:** You can do that?
+
+**SILAS:** I could. Three lives ago. The knowledge bleeds through sometimes.
+
+-----
+
+**[PLAYER CHOICE]**
+
+> **[GUIDE THE SOULS]**
+>
+> - Silas performs a small ritual
+> - +Relationship with Corra
+> - Costs LP
+> - *Silas kneels. His hands trace patterns in the air—muscle memory from a life he doesn't remember. The Cordwork's remains glow briefly, then dim. Something rises. Something leaves.*
+> - **CORRA:** Thank you.
+> - **SILAS:** Don't thank me. I don't know where they're going. Just… away from here.
+
+> **[MOVE ON]**
+>
+> - The party continues
+> - Vesk approves
+> - Corra goes quiet
+> - **VESK:** We can mourn later. Or never. Let's go.
+> - *Corra stands slowly. Her button eyes don't leave the fallen Cordwork until the shadows swallow it.*
+
+-----
+
+## Scene 3: Veinkeeper Patrol
+
+*Party observes patrol from hiding.*
+
+**VEINKEEPER SCOUT 1:** —telling you, the readings are wrong. This Node shouldn't be active.
+
+**VEINKEEPER SCOUT 2:** Warden says contain it. We contain it.
+
+**VEINKEEPER SCOUT 1:** The Hollow March hit two Nodes this month. What if they're already here?
+
+**VEINKEEPER SCOUT 2:** Then we burn what's left.
+
+*They move on.*
+
+-----
+
+**[PLAYER CHOICE]**
+
+> **[AMBUSH]**
+>
+> - Fight Veinkeeper Scout x2
+> - Get sigil immediately
+> - Faster but alerts remaining patrols
+> - **SILAS:** Quick and quiet. Don't let them signal.
+
+> **[FOLLOW]**
+>
+> - Tail them to patrol base
+> - Harder fight: Scout x3 + Warden present
+> - Additional loot and information
+> - **SILAS:** Let's see where the nest is. Might learn something useful.
+
+-----
+
+## Scene 4: Confrontation (varies by choice)
+
+### If AMBUSH was chosen:
+
+*Quick combat in tunnel. After victory:*
+
+**VESK:** (taking sigil from body) Got it.
+
+**SILAS:** (checking the scout's equipment) They were carrying purification charges. Enough to collapse half this tunnel.
+
+**CORRA:** They were going to destroy the Node?
+
+**SILAS:** Better that than let the Hollow March have it. That's how Veinkeepers think.
+
+-----
+
+### If FOLLOW was chosen:
+
+*Party discovers small Veinkeeper encampment.*
+
+**SILAS:** (whispering) Three scouts. And the Warden's tent is—
+
+**VEINKEEPER WARDEN:** (stepping from shadows behind them) —right here.
+
+*Combat initiates immediately.*
+
+**[BATTLE: Veinkeeper Scout x3 + Veinkeeper Warden]**
+
+*After victory, additional scene:*
+
+**SILAS:** (searching Warden's belongings) Reports. The Node's been fluctuating for weeks. They don't know why.
+
+**CORRA:** But they were going to destroy it anyway?
+
+**SILAS:** "Purification Protocol." If they can't control it, no one can.
+
+**VESK:** Found something else. (holds up a map) Hollow March movements. They've been tracking them.
+
+**SILAS:** Keep it. We might need to know where *not* to go.
+
+-----
+
+## Act 1 Boss: Veinkeeper Warden
+
+*If AMBUSH was chosen earlier, the Warden confronts party at the sealed door.*
+
+**VEINKEEPER WARDEN:** An Awakened. A Burner deserter. And a Cordwork puppet.
+
+**CORRA:** I'm not—
+
+**VEINKEEPER WARDEN:** You're *all* puppets. Every soul in the cycle. The Engineer pulls strings; you dance. The difference is we *know*. We serve willingly.
+
+**SILAS:** And the Node? What happens when the Engineer stops paying attention to it?
+
+**WARDEN:** Purification. The Hollow March wants to break the Veinwork. We'll deny them the target.
+
+**VESK:** By destroying it yourself?
+
+**WARDEN:** Better us than them.
+
+**[BOSS BATTLE: Veinkeeper Warden + Scout x2]**
+
+-----
+
+### Post-Boss Dialogue
+
+**VESK:** (standing over Warden's body) True believer to the end.
+
+**SILAS:** (taking sigil) He wasn't wrong. About any of it. The Engineer does pull strings. The system is broken.
+
+**CORRA:** Then why are we fighting to save the Node?
+
+**SILAS:** Because breaking it isn't the answer. There *has* to be a third option. There *has* to be.
+
+-----
+
+## Act 1 Finale: The Corrupted Node
+
+*Party breaks seal. Door opens to reveal the Node chamber—and something is very wrong.*
+
+*The Node floats in the cavern center. But instead of the usual kaleidoscope of ley colors, it pulses BLACK. Not dark. BLACK. Like a hole in reality.*
+
+**SILAS:** That's not… Nodes don't do that.
+
+*A voice emerges. Not from the Node. From everywhere.*
+
+**ECHO:** (disembodied, fragmented) …been waiting… seventeen incarnations… finally found the door again…
+
+*A figure descends from the cavern ceiling. Porcelain. Cracked. Glowing.*
+
+**ECHO:** Hello, Silas. You don't remember me. But I remember you. I remember *everything*.
+
+**[END ACT 1]**
+
+-----
+
+## Act 1 Encounters Summary
+
+|Encounter                   |Type             |Location       |
+|----------------------------|-----------------|---------------|
+|Ley-Rat Swarm x3            |Tutorial         |Prologue tunnel|
+|Frayed Cordwork x2          |Story            |Scene 2        |
+|Veinkeeper Scout x2         |Optional (Ambush)|Scene 3        |
+|Veinkeeper Scout x3 + Warden|Optional (Follow)|Scene 3        |
+|Veinkeeper Warden + Scout x2|Boss             |Sealed Door    |
+
+## Act 1 Choices Summary
+
+|Choice           |Option A                     |Option B                     |
+|-----------------|-----------------------------|-----------------------------|
+|The Frayed Souls |Guide the Souls (+Corra, -LP)|Move On (+Vesk, Corra quiet) |
+|Veinkeeper Patrol|Ambush (quick, less loot)    |Follow (harder, more rewards)|
+
+-----
+
+*End Part 2*

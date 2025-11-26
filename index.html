@@ -315,6 +315,16 @@
             background: linear-gradient(to bottom, #22d3ee 0%, #0891b2 100%);
             border: 3px solid #155e75;
         }
+        .enemy-warden {
+            background: linear-gradient(to bottom, #dc2626 0%, #991b1b 100%);
+            border: 3px solid #7f1d1d;
+            width: 55px;
+            height: 55px;
+        }
+        .combat-enemy.enemy-warden {
+            width: 90px;
+            height: 90px;
+        }
 
         /* Virtual Joystick */
         #joystick-area {
@@ -850,12 +860,81 @@
         .element-vital { border-color: #22c55e !important; }
         .element-thermal { border-color: #f97316 !important; }
         .element-aetheric { border-color: #a855f7 !important; }
+
+        /* Player Choice UI */
+        #choice-container {
+            position: absolute;
+            bottom: 20px;
+            left: 10px;
+            right: 10px;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+        }
+        #choice-container.active {
+            display: flex;
+        }
+        .choice-btn {
+            padding: 15px 20px;
+            font-size: 14px;
+            background: linear-gradient(to bottom, #374151, #1f2937);
+            color: #fff;
+            border: 2px solid #4b5563;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            transition: border-color 0.2s, transform 0.1s;
+        }
+        .choice-btn:hover, .choice-btn:focus {
+            border-color: #fbbf24;
+            transform: scale(1.02);
+        }
+        .choice-btn:active {
+            transform: scale(0.98);
+        }
+        .choice-title {
+            font-weight: bold;
+            color: #fbbf24;
+            margin-bottom: 4px;
+        }
+        .choice-desc {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        /* Scene location header */
+        #scene-location {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 8px 20px;
+            border-radius: 20px;
+            border: 1px solid #4a3b6b;
+            color: #a78bfa;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 100;
+            display: none;
+        }
+        #scene-location.active {
+            display: block;
+        }
+
+        /* Stage directions in dialog */
+        .stage-direction {
+            color: #6b7280;
+            font-style: italic;
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
     <div id="game">
         <!-- Dialog Scene -->
         <div id="dialog-scene" class="active">
+            <div id="scene-location">Underground Tunnel</div>
             <div id="sprite-left" class="dialog-sprite">
                 <div class="dialog-sprite-face">
                     <div class="dialog-sprite-eyes">
@@ -881,6 +960,7 @@
                 <div id="dialog-text">The threads grow thin here...</div>
                 <div id="dialog-continue">tap to continue</div>
             </div>
+            <div id="choice-container"></div>
         </div>
 
         <!-- Exploration Scene -->
@@ -1060,6 +1140,19 @@
                 cssClass: 'enemy-wisp',
                 ai: 'wisp',
                 skills: [{ id: 'null_pulse', name: 'Null Pulse', lpDrain: 10 }]
+            },
+            warden: {
+                name: 'Veinkeeper Warden',
+                hp: 120, atk: 16, def: 10, tap: 14, spd: 8,
+                xp: 100, gold: 80,
+                element: ELEMENTS.THERMAL,
+                cssClass: 'enemy-warden',
+                ai: 'warden',
+                isBoss: true,
+                skills: [
+                    { id: 'judgment', name: 'Judgment', multiplier: 2.0, element: ELEMENTS.THERMAL },
+                    { id: 'purity_protocol', name: 'Purity Protocol', type: 'buff_allies' }
+                ]
             }
         };
 
@@ -1076,6 +1169,19 @@
             partyXP: 0,
             gold: 0,
             lp: STARTING_LP,
+
+            // Story progression
+            story: {
+                currentAct: 'prologue',
+                currentScene: 'opening',
+                flags: {
+                    guidedSouls: false,      // Player chose to guide the Frayed souls
+                    ambushedPatrol: false,   // Player chose to ambush vs follow
+                    corraRelationship: 0,    // Relationship modifier
+                    veskRelationship: 0
+                },
+                completedScenes: []
+            },
 
             // Exploration
             playerPos: { x: 0, y: 0 },
@@ -1095,26 +1201,534 @@
             levelUpQueue: []
         };
 
-        // ==================== DIALOG SCRIPTS ====================
-        const introDialog = [
-            { speaker: 'Silas', text: 'The threads grow thin here. Can you feel it?' },
-            { speaker: 'Corra', text: 'The Vein is restless. We should proceed with caution.' },
-            { speaker: 'Silas', text: 'Our party shares a pool of Ley Power - use it wisely.' },
-            { speaker: 'Corra', text: 'Each action in combat follows the turn order based on Speed.' },
-            { speaker: 'Silas', text: 'Strike for physical damage. Tap skills cost LP but are powerful.' },
-            { speaker: 'Corra', text: 'Guard to reduce damage and restore LP to the pool.' },
-            { speaker: 'Silas', text: 'Let\'s move. The creatures of the Hollow Vein await.' }
-        ];
+        // ==================== STORY SCRIPTS ====================
+        const STORY = {
+            // PROLOGUE: The Hum Beneath
+            prologue: {
+                opening: {
+                    location: 'Underground Tunnel',
+                    dialog: [
+                        { speaker: '', text: '*Dripping water. Distant rumble. Green light pulses from the stone walls.*', stage: true },
+                        { speaker: 'Silas', text: 'Third convergence marker. Should be here. Should be—' },
+                        { speaker: '', text: '*Corra emerges from shadows. Her wooden joints creak.*', stage: true },
+                        { speaker: 'Corra', text: 'The Veinwork... shifted. Again. Two hours ago.' },
+                        { speaker: 'Silas', text: 'Resonance Event?' },
+                        { speaker: 'Corra', text: 'Small one. The tunnel we came through—' },
+                        { speaker: 'Silas', text: 'Gone?' },
+                        { speaker: 'Corra', text: '...filled with stone now. Like it was never there.' },
+                        { speaker: '', text: '*Vesk stomps into view, hammer over shoulder, orange eyes cutting through the dark.*', stage: true },
+                        { speaker: 'Vesk', text: 'So we\'re trapped underground because you wanted to chase a rumor. Wonderful.' },
+                        { speaker: 'Silas', text: 'It\'s not a rumor. The Node here—something\'s wrong with it. The Hollow March shouldn\'t know about this place, but they\'re coming. I saw it.' },
+                        { speaker: 'Vesk', text: 'You saw what? More ghosts? More dead men\'s dreams?' },
+                        { speaker: '', text: '*Silas grabs Vesk\'s coat. His grey eyes have gone distant.*', stage: true },
+                        { speaker: 'Silas', text: 'I saw you burn. I saw Corra\'s sigil crack. I saw this place collapse and everything we\'re trying to protect fall into the wrong hands.' },
+                        { speaker: 'Silas', text: 'So we find another way out. And we find the Node before they do.' }
+                    ],
+                    next: 'tutorialBattle'
+                },
+                tutorialBattle: {
+                    location: 'Underground Tunnel',
+                    dialog: [
+                        { speaker: '', text: '*Chittering echoes from the darkness ahead. Green eyes glint in the shadows.*', stage: true },
+                        { speaker: 'Vesk', text: 'Company.' },
+                        { speaker: 'Silas', text: 'Ley-rats. They\'re drawn to raw veinite. Stay sharp.' }
+                    ],
+                    combat: {
+                        enemies: ['leyrat', 'leyrat', 'leyrat'],
+                        isTutorial: true
+                    },
+                    next: 'postTutorial'
+                },
+                postTutorial: {
+                    location: 'Underground Tunnel',
+                    dialog: [
+                        { speaker: 'Vesk', text: 'Vermin this deep. Feeding on raw veinite.' },
+                        { speaker: 'Corra', text: 'The Node... is leaking?' },
+                        { speaker: 'Silas', text: 'Or something\'s drinking from it.' }
+                    ],
+                    next: 'act1_scene1'
+                }
+            },
 
+            // ACT 1: Under the Skin
+            act1: {
+                scene1: {
+                    location: 'The Hollow Vein - Sealed Door',
+                    dialog: [
+                        { speaker: '', text: '*The party reaches a massive iron door marked with Veinkeeper sigils.*', stage: true },
+                        { speaker: 'Vesk', text: 'Veinkeeper seal. Recent.' },
+                        { speaker: 'Corra', text: 'Why would they... seal something in?' },
+                        { speaker: '', text: '*Silas touches the sigils and flinches.*', stage: true },
+                        { speaker: 'Silas', text: 'They\'re not sealing something in. They\'re sealing something out. The Node— they know. They know what\'s happening here and they\'re trying to contain it.' },
+                        { speaker: 'Vesk', text: 'So we break it down?' },
+                        { speaker: 'Silas', text: 'We find whoever set the seal and take their authorization sigil. Quietly.' },
+                        { speaker: 'Corra', text: '...there are Veinkeeper patrols deeper in?' },
+                        { speaker: 'Silas', text: 'I\'m counting on it.' }
+                    ],
+                    next: 'scene2_frayed'
+                },
+                scene2_frayed: {
+                    location: 'The Hollow Vein - Mining Shaft',
+                    dialog: [
+                        { speaker: '', text: '*Shuffling sounds echo from the darkness. Shapes move with jerky, broken motions.*', stage: true },
+                        { speaker: 'Corra', text: 'Wait.' },
+                        { speaker: '', text: '*One of the Cordworks turns. Its painted face is half-scraped away. It reaches toward Corra.*', stage: true },
+                        { speaker: 'Frayed Cordwork', text: '...ribbon... blue ribbon... daughter...?' },
+                        { speaker: '', text: '*Corra\'s hand goes to her neck. To her ribbon.*', stage: true },
+                        { speaker: 'Corra', text: 'I... I don\'t...' },
+                        { speaker: 'Frayed Cordwork', text: '...forgot her name too... we all forget... the Loom takes...' },
+                        { speaker: '', text: '*The Cordwork\'s reaching becomes aggressive.*', stage: true }
+                    ],
+                    combat: {
+                        enemies: ['cordwork', 'cordwork']
+                    },
+                    next: 'scene2_choice'
+                },
+                scene2_choice: {
+                    location: 'The Hollow Vein - Mining Shaft',
+                    dialog: [
+                        { speaker: '', text: '*Corra kneels by the fallen Cordwork.*', stage: true },
+                        { speaker: 'Corra', text: '...how long were you here? Waiting?' },
+                        { speaker: 'Vesk', text: 'Corra. We have to move.' },
+                        { speaker: 'Corra', text: 'They were people.' },
+                        { speaker: 'Vesk', text: 'They were. Now they\'re kindling. That\'s the mercy of it.' },
+                        { speaker: '', text: '*Corra doesn\'t move.*', stage: true },
+                        { speaker: 'Silas', text: 'I can... try something. If there\'s any thread left, I might be able to guide it back to the Loom.' },
+                        { speaker: 'Corra', text: 'You can do that?' },
+                        { speaker: 'Silas', text: 'I could. Three lives ago. The knowledge bleeds through sometimes.' }
+                    ],
+                    choice: {
+                        prompt: 'What do you do?',
+                        options: [
+                            {
+                                title: 'Guide the Souls',
+                                desc: 'Silas performs a ritual. Costs LP. +Relationship with Corra.',
+                                flag: 'guidedSouls',
+                                value: true,
+                                lpCost: 15,
+                                relationship: { corra: 1 },
+                                next: 'scene2_guide'
+                            },
+                            {
+                                title: 'Move On',
+                                desc: 'The party continues. Vesk approves. Corra goes quiet.',
+                                flag: 'guidedSouls',
+                                value: false,
+                                relationship: { vesk: 1 },
+                                next: 'scene2_moveon'
+                            }
+                        ]
+                    }
+                },
+                scene2_guide: {
+                    location: 'The Hollow Vein - Mining Shaft',
+                    dialog: [
+                        { speaker: '', text: '*Silas kneels. His hands trace patterns in the air—muscle memory from a life he doesn\'t remember.*', stage: true },
+                        { speaker: '', text: '*The Cordwork\'s remains glow briefly, then dim. Something rises. Something leaves.*', stage: true },
+                        { speaker: 'Corra', text: 'Thank you.' },
+                        { speaker: 'Silas', text: 'Don\'t thank me. I don\'t know where they\'re going. Just... away from here.' }
+                    ],
+                    next: 'scene3_patrol'
+                },
+                scene2_moveon: {
+                    location: 'The Hollow Vein - Mining Shaft',
+                    dialog: [
+                        { speaker: 'Vesk', text: 'We can mourn later. Or never. Let\'s go.' },
+                        { speaker: '', text: '*Corra stands slowly. Her button eyes don\'t leave the fallen Cordwork until the shadows swallow it.*', stage: true }
+                    ],
+                    next: 'scene3_patrol'
+                },
+                scene3_patrol: {
+                    location: 'The Hollow Vein - Upper Gallery',
+                    dialog: [
+                        { speaker: '', text: '*The party observes a Veinkeeper patrol from hiding.*', stage: true },
+                        { speaker: 'Scout 1', text: '—telling you, the readings are wrong. This Node shouldn\'t be active.' },
+                        { speaker: 'Scout 2', text: 'Warden says contain it. We contain it.' },
+                        { speaker: 'Scout 1', text: 'The Hollow March hit two Nodes this month. What if they\'re already here?' },
+                        { speaker: 'Scout 2', text: 'Then we burn what\'s left.' },
+                        { speaker: '', text: '*They move on.*', stage: true }
+                    ],
+                    choice: {
+                        prompt: 'How do you approach?',
+                        options: [
+                            {
+                                title: 'Ambush',
+                                desc: 'Fight 2 scouts now. Quick but alerts remaining patrols.',
+                                flag: 'ambushedPatrol',
+                                value: true,
+                                next: 'scene4_ambush'
+                            },
+                            {
+                                title: 'Follow',
+                                desc: 'Tail them to patrol base. Harder fight, more rewards.',
+                                flag: 'ambushedPatrol',
+                                value: false,
+                                next: 'scene4_follow'
+                            }
+                        ]
+                    }
+                },
+                scene4_ambush: {
+                    location: 'The Hollow Vein - Upper Gallery',
+                    dialog: [
+                        { speaker: 'Silas', text: 'Quick and quiet. Don\'t let them signal.' }
+                    ],
+                    combat: {
+                        enemies: ['scout', 'scout']
+                    },
+                    next: 'scene4_ambush_post'
+                },
+                scene4_ambush_post: {
+                    location: 'The Hollow Vein - Upper Gallery',
+                    dialog: [
+                        { speaker: '', text: '*Vesk takes the sigil from the fallen scout.*', stage: true },
+                        { speaker: 'Vesk', text: 'Got it.' },
+                        { speaker: '', text: '*Silas checks the scout\'s equipment.*', stage: true },
+                        { speaker: 'Silas', text: 'They were carrying purification charges. Enough to collapse half this tunnel.' },
+                        { speaker: 'Corra', text: 'They were going to destroy the Node?' },
+                        { speaker: 'Silas', text: 'Better that than let the Hollow March have it. That\'s how Veinkeepers think.' }
+                    ],
+                    next: 'boss_approach'
+                },
+                scene4_follow: {
+                    location: 'Veinkeeper Encampment',
+                    dialog: [
+                        { speaker: '', text: '*The party discovers a small Veinkeeper encampment.*', stage: true },
+                        { speaker: 'Silas', text: 'Three scouts. And the Warden\'s tent is—' },
+                        { speaker: '', text: '*The Warden steps from shadows behind them.*', stage: true },
+                        { speaker: 'Warden', text: '—right here.' }
+                    ],
+                    combat: {
+                        enemies: ['scout', 'scout', 'scout', 'warden']
+                    },
+                    next: 'scene4_follow_post'
+                },
+                scene4_follow_post: {
+                    location: 'Veinkeeper Encampment',
+                    dialog: [
+                        { speaker: '', text: '*Silas searches the Warden\'s belongings.*', stage: true },
+                        { speaker: 'Silas', text: 'Reports. The Node\'s been fluctuating for weeks. They don\'t know why.' },
+                        { speaker: 'Corra', text: 'But they were going to destroy it anyway?' },
+                        { speaker: 'Silas', text: '"Purification Protocol." If they can\'t control it, no one can.' },
+                        { speaker: 'Vesk', text: 'Found something else.' },
+                        { speaker: '', text: '*He holds up a map.*', stage: true },
+                        { speaker: 'Vesk', text: 'Hollow March movements. They\'ve been tracking them.' },
+                        { speaker: 'Silas', text: 'Keep it. We might need to know where not to go.' }
+                    ],
+                    next: 'finale_approach'
+                },
+                boss_approach: {
+                    location: 'The Hollow Vein - Sealed Door',
+                    dialog: [
+                        { speaker: '', text: '*The party returns to the sealed door. A figure blocks their path.*', stage: true },
+                        { speaker: 'Warden', text: 'An Awakened. A Burner deserter. And a Cordwork puppet.' },
+                        { speaker: 'Corra', text: 'I\'m not—' },
+                        { speaker: 'Warden', text: 'You\'re all puppets. Every soul in the cycle. The Engineer pulls strings; you dance. The difference is we know. We serve willingly.' },
+                        { speaker: 'Silas', text: 'And the Node? What happens when the Engineer stops paying attention to it?' },
+                        { speaker: 'Warden', text: 'Purification. The Hollow March wants to break the Veinwork. We\'ll deny them the target.' },
+                        { speaker: 'Vesk', text: 'By destroying it yourself?' },
+                        { speaker: 'Warden', text: 'Better us than them.' }
+                    ],
+                    combat: {
+                        enemies: ['warden', 'scout', 'scout'],
+                        isBoss: true
+                    },
+                    next: 'boss_post'
+                },
+                boss_post: {
+                    location: 'The Hollow Vein - Sealed Door',
+                    dialog: [
+                        { speaker: '', text: '*Vesk stands over the Warden\'s body.*', stage: true },
+                        { speaker: 'Vesk', text: 'True believer to the end.' },
+                        { speaker: '', text: '*Silas takes the sigil.*', stage: true },
+                        { speaker: 'Silas', text: 'He wasn\'t wrong. About any of it. The Engineer does pull strings. The system is broken.' },
+                        { speaker: 'Corra', text: 'Then why are we fighting to save the Node?' },
+                        { speaker: 'Silas', text: 'Because breaking it isn\'t the answer. There has to be a third option. There has to be.' }
+                    ],
+                    next: 'finale'
+                },
+                finale_approach: {
+                    location: 'The Hollow Vein - Sealed Door',
+                    dialog: [
+                        { speaker: '', text: '*With the Warden defeated, the sigil opens the massive iron door.*', stage: true }
+                    ],
+                    next: 'finale'
+                },
+                finale: {
+                    location: 'The Corrupted Node',
+                    dialog: [
+                        { speaker: '', text: '*The door opens to reveal the Node chamber—and something is very wrong.*', stage: true },
+                        { speaker: '', text: '*The Node floats in the cavern center. But instead of the usual kaleidoscope of ley colors, it pulses BLACK. Not dark. BLACK. Like a hole in reality.*', stage: true },
+                        { speaker: 'Silas', text: 'That\'s not... Nodes don\'t do that.' },
+                        { speaker: '', text: '*A voice emerges. Not from the Node. From everywhere.*', stage: true },
+                        { speaker: 'Echo', text: '...been waiting... seventeen incarnations... finally found the door again...' },
+                        { speaker: '', text: '*A figure descends from the cavern ceiling. Porcelain. Cracked. Glowing.*', stage: true },
+                        { speaker: 'Echo', text: 'Hello, Silas. You don\'t remember me. But I remember you. I remember everything.' },
+                        { speaker: '', text: '[END OF ACT 1]', stage: true },
+                        { speaker: '', text: 'Thank you for playing the Prologue and Act 1 of The Loom of Ashveld. More content coming soon!', stage: true }
+                    ],
+                    next: 'end'
+                }
+            }
+        };
+
+        // Legacy dialog for demo end
         const allClearedDialog = [
             { speaker: 'Corra', text: 'The area is clear. We\'ve done well.' },
-            { speaker: 'Silas', text: 'But this is only the beginning. The Node calls to us still.' },
-            { speaker: 'Corra', text: 'Thank you for playing this demo of The Loom of Ashveld.' }
+            { speaker: 'Silas', text: 'But this is only the beginning. The Node calls to us still.' }
         ];
+
+        // ==================== STORY SYSTEM ====================
+        function getScene(sceneId) {
+            // Handle cross-act references
+            if (sceneId.startsWith('act1_')) {
+                return STORY.act1[sceneId.replace('act1_', '')];
+            }
+            // Check current act first
+            const act = game.story.currentAct;
+            if (STORY[act] && STORY[act][sceneId]) {
+                return STORY[act][sceneId];
+            }
+            // Check act1 for all other scenes
+            if (STORY.act1[sceneId]) {
+                game.story.currentAct = 'act1';
+                return STORY.act1[sceneId];
+            }
+            return null;
+        }
+
+        function playScene(sceneId) {
+            const scene = getScene(sceneId);
+            if (!scene) {
+                console.error('Scene not found:', sceneId);
+                return;
+            }
+
+            game.story.currentScene = sceneId;
+
+            // Update location display
+            const locationEl = document.getElementById('scene-location');
+            if (scene.location) {
+                locationEl.textContent = scene.location;
+                locationEl.classList.add('active');
+            } else {
+                locationEl.classList.remove('active');
+            }
+
+            // Play dialog, then handle combat/choice/next
+            showStoryDialog(scene.dialog, () => {
+                if (scene.combat) {
+                    startStoryCombat(scene.combat, sceneId);
+                } else if (scene.choice) {
+                    showChoice(scene.choice, sceneId);
+                } else if (scene.next) {
+                    if (scene.next === 'end') {
+                        // End of current content
+                        switchToExploration();
+                    } else {
+                        playScene(scene.next);
+                    }
+                }
+            });
+        }
+
+        function showStoryDialog(dialog, callback) {
+            game.dialogQueue = [...dialog];
+            game.dialogCallback = callback;
+            game.dialogIndex = 0;
+
+            // Hide choice container
+            document.getElementById('choice-container').classList.remove('active');
+
+            const line = dialog[0];
+            updateDialogDisplay(line);
+
+            game.currentScene = 'dialog';
+            document.getElementById('dialog-scene').classList.add('active');
+            document.getElementById('exploration-scene').style.display = 'none';
+            document.getElementById('combat-scene').style.display = 'none';
+        }
+
+        function updateDialogDisplay(line) {
+            const speakerEl = document.getElementById('dialog-speaker');
+            const textEl = document.getElementById('dialog-text');
+            const continueEl = document.getElementById('dialog-continue');
+
+            if (line.stage) {
+                // Stage direction
+                speakerEl.textContent = '';
+                textEl.innerHTML = `<span class="stage-direction">${line.text}</span>`;
+            } else {
+                speakerEl.textContent = line.speaker;
+                textEl.textContent = line.text;
+            }
+            continueEl.style.display = 'block';
+
+            // Update sprite labels based on who's speaking
+            updateSpriteDisplay(line.speaker);
+        }
+
+        function updateSpriteDisplay(speaker) {
+            const leftLabel = document.querySelector('#sprite-left .dialog-sprite-label');
+            const rightLabel = document.querySelector('#sprite-right .dialog-sprite-label');
+            const leftSprite = document.getElementById('sprite-left');
+            const rightSprite = document.getElementById('sprite-right');
+
+            // Default characters on each side
+            leftLabel.textContent = 'Silas';
+            rightLabel.textContent = 'Corra';
+
+            // Dim non-speaking sprites
+            leftSprite.style.opacity = speaker === 'Silas' ? '1' : '0.6';
+            rightSprite.style.opacity = speaker === 'Corra' ? '1' : '0.6';
+
+            // Handle other speakers
+            if (speaker === 'Vesk') {
+                rightLabel.textContent = 'Vesk';
+                rightSprite.style.opacity = '1';
+                leftSprite.style.opacity = '0.6';
+                rightSprite.style.background = 'linear-gradient(to bottom, #f97316 0%, #ea580c 100%)';
+            } else if (speaker === 'Echo') {
+                rightLabel.textContent = 'Echo';
+                rightSprite.style.opacity = '1';
+                leftSprite.style.opacity = '0.6';
+                rightSprite.style.background = 'linear-gradient(to bottom, #22d3ee 0%, #06b6d4 100%)';
+            } else if (speaker === 'Warden' || speaker === 'Scout 1' || speaker === 'Scout 2') {
+                rightLabel.textContent = speaker;
+                rightSprite.style.opacity = '1';
+                leftSprite.style.opacity = '0.6';
+                rightSprite.style.background = 'linear-gradient(to bottom, #ef4444 0%, #b91c1c 100%)';
+            } else if (speaker === 'Frayed Cordwork') {
+                rightLabel.textContent = 'Frayed';
+                rightSprite.style.opacity = '1';
+                leftSprite.style.opacity = '0.6';
+                rightSprite.style.background = 'linear-gradient(to bottom, #a855f7 0%, #7c3aed 100%)';
+            } else if (speaker === 'Corra') {
+                rightSprite.style.background = 'linear-gradient(to bottom, #a78bfa 0%, #7c3aed 100%)';
+            } else {
+                // Reset to default Corra color when no specific speaker
+                rightSprite.style.background = 'linear-gradient(to bottom, #22c55e 0%, #15803d 100%)';
+            }
+
+            // Hide sprites for stage directions
+            if (!speaker) {
+                leftSprite.style.opacity = '0.4';
+                rightSprite.style.opacity = '0.4';
+            }
+        }
+
+        function showChoice(choiceData, currentSceneId) {
+            const container = document.getElementById('choice-container');
+            container.innerHTML = '';
+
+            // Hide the continue prompt
+            document.getElementById('dialog-continue').style.display = 'none';
+
+            choiceData.options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'choice-btn';
+                btn.innerHTML = `
+                    <div class="choice-title">${option.title}</div>
+                    <div class="choice-desc">${option.desc}</div>
+                `;
+                btn.onclick = () => selectChoice(option, currentSceneId);
+                container.appendChild(btn);
+            });
+
+            container.classList.add('active');
+        }
+
+        function selectChoice(option, currentSceneId) {
+            // Apply choice consequences
+            if (option.flag) {
+                game.story.flags[option.flag] = option.value;
+            }
+
+            if (option.lpCost) {
+                game.lp = Math.max(0, game.lp - option.lpCost);
+            }
+
+            if (option.relationship) {
+                for (const [char, mod] of Object.entries(option.relationship)) {
+                    const key = char + 'Relationship';
+                    if (game.story.flags[key] !== undefined) {
+                        game.story.flags[key] += mod;
+                    }
+                }
+            }
+
+            // Hide choice UI
+            document.getElementById('choice-container').classList.remove('active');
+
+            // Continue to next scene
+            if (option.next) {
+                playScene(option.next);
+            }
+        }
+
+        function startStoryCombat(combatData, currentSceneId) {
+            game.currentScene = 'combat';
+            game.combatActive = true;
+            game.combatTurnCount = 0;
+            game.pendingSceneId = currentSceneId;
+
+            // Reset combat stats
+            game.party.forEach(char => {
+                char.guarding = false;
+                char.damageDealt = 0;
+                char.healingDone = 0;
+            });
+
+            // Initialize enemies from template names
+            game.enemies = combatData.enemies.map((templateName, i) => {
+                const template = ENEMY_TEMPLATES[templateName];
+                return {
+                    ...template,
+                    id: i,
+                    combatId: i,
+                    currentHp: template.hp,
+                    maxHp: template.hp,
+                    statusEffects: [],
+                    guarding: false,
+                    turnCounter: 0
+                };
+            });
+
+            // Store combat data for post-combat scene progression
+            game.currentCombatData = combatData;
+
+            buildTurnOrder();
+            updateCombatUI();
+            showCombatScene();
+
+            if (combatData.isBoss) {
+                combatLog.textContent = 'BOSS BATTLE!';
+            } else if (combatData.isTutorial) {
+                combatLog.textContent = 'Tutorial Battle - Learn the basics!';
+            } else {
+                combatLog.textContent = 'Battle begins!';
+            }
+
+            setTimeout(() => processNextTurn(), 800);
+        }
+
+        function onStoryCombatEnd(victory) {
+            if (victory) {
+                // Get the current scene to find the next scene
+                const scene = getScene(game.pendingSceneId);
+                if (scene && scene.next) {
+                    setTimeout(() => playScene(scene.next), 500);
+                }
+            } else {
+                // On defeat, restart from current scene
+                setTimeout(() => playScene(game.pendingSceneId), 500);
+            }
+        }
 
         // ==================== INITIALIZATION ====================
         function initParty() {
-            game.party = ['silas', 'corra', 'vesk', 'echo'].map(id => {
+            // Start with Silas, Corra, Vesk - Echo joins in Act 2
+            game.party = ['silas', 'corra', 'vesk'].map(id => {
                 const template = CHARACTER_TEMPLATES[id];
                 return {
                     id,
@@ -1403,6 +2017,20 @@
                         return { action: 'skill', skill: enemy.skills[0], target: highestTap };
                     }
                     return { action: 'strike', target: highestTap };
+
+                case 'warden':
+                    // Boss AI: Judgment on highest damage dealer, Purity Protocol to buff allies
+                    enemy.turnCounter = (enemy.turnCounter || 0) + 1;
+                    // Use Purity Protocol every 3rd turn if there are ally enemies
+                    const allyEnemies = game.enemies.filter(e => e !== enemy && e.currentHp > 0);
+                    if (enemy.turnCounter % 3 === 0 && allyEnemies.length > 0 && enemy.skills) {
+                        return { action: 'skill', skill: enemy.skills[1], target: null, special: 'Purity Protocol' };
+                    }
+                    // Use Judgment on highest threat
+                    if (enemy.skills) {
+                        return { action: 'skill', skill: enemy.skills[0], target: highestThreat };
+                    }
+                    return { action: 'strike', target: highestThreat };
 
                 default:
                     return { action: 'strike', target: randomTarget };
@@ -1698,6 +2326,9 @@
             game.combatActive = false;
             disablePlayerActions();
 
+            // Check if this is a story combat
+            const isStoryCombat = game.pendingSceneId !== undefined;
+
             setTimeout(() => {
                 const resultEl = document.getElementById('combat-result');
                 const resultText = document.getElementById('result-text');
@@ -1715,9 +2346,11 @@
                     let totalGold = 0;
 
                     game.enemies.forEach(enemy => {
-                        // Mark map enemy as defeated
-                        const mapEnemy = game.mapEnemies.find(e => e.id === enemy.id);
-                        if (mapEnemy) mapEnemy.alive = false;
+                        // Mark map enemy as defeated (only for exploration combat)
+                        if (!isStoryCombat) {
+                            const mapEnemy = game.mapEnemies.find(e => e.id === enemy.id);
+                            if (mapEnemy) mapEnemy.alive = false;
+                        }
 
                         // XP formula: Enemy HP * 0.5 * level modifier
                         const baseXP = Math.floor(enemy.maxHp * 0.5);
@@ -1737,7 +2370,7 @@
                     resultText.textContent = 'DEFEAT';
                     resultText.className = 'defeat';
                     rewardsText.textContent = '';
-                    xpGainEl.textContent = '';
+                    xpGainEl.textContent = 'Retrying...';
 
                     // Restore party HP on defeat
                     game.party.forEach(char => {
@@ -1746,6 +2379,10 @@
                         char.statusEffects = [];
                     });
                 }
+
+                // Store victory state for continue button
+                game.lastCombatVictory = victory;
+                game.lastCombatWasStory = isStoryCombat;
             }, 600);
         }
 
@@ -2043,9 +2680,12 @@
             game.dialogCallback = callback;
             game.dialogIndex = 0;
 
+            // Hide choice container and scene location
+            document.getElementById('choice-container').classList.remove('active');
+            document.getElementById('scene-location').classList.remove('active');
+
             const line = game.dialogQueue[0];
-            document.getElementById('dialog-speaker').textContent = line.speaker;
-            document.getElementById('dialog-text').textContent = line.text;
+            updateDialogDisplay(line);
 
             game.currentScene = 'dialog';
             document.getElementById('dialog-scene').classList.add('active');
@@ -2054,6 +2694,11 @@
         }
 
         function advanceDialog() {
+            // Don't advance if choice is active
+            if (document.getElementById('choice-container').classList.contains('active')) {
+                return;
+            }
+
             game.dialogIndex++;
 
             if (game.dialogIndex >= game.dialogQueue.length) {
@@ -2065,8 +2710,7 @@
             }
 
             const line = game.dialogQueue[game.dialogIndex];
-            document.getElementById('dialog-speaker').textContent = line.speaker;
-            document.getElementById('dialog-text').textContent = line.text;
+            updateDialogDisplay(line);
         }
 
         function switchToExploration() {
@@ -2255,8 +2899,8 @@
             initMapEnemies();
             game.lp = STARTING_LP;
 
-            // Start with intro dialog
-            showDialog(introDialog, switchToExploration);
+            // Start with the Prologue
+            playScene('opening');
 
             // Dialog handlers
             const dialogScene = document.getElementById('dialog-scene');
@@ -2299,6 +2943,11 @@
 
                 if (game.levelUpQueue.length > 0) {
                     showNextLevelUp();
+                } else if (game.lastCombatWasStory) {
+                    // Story combat - continue story progression
+                    onStoryCombatEnd(game.lastCombatVictory);
+                    game.pendingSceneId = undefined;
+                    game.lastCombatWasStory = false;
                 } else if (game.mapEnemies.every(e => !e.alive)) {
                     showDialog(allClearedDialog, switchToExploration);
                 } else {
