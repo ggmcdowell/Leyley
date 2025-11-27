@@ -3246,7 +3246,15 @@
             if (game.levelUpQueue.length === 0) {
                 document.getElementById('levelup-overlay').classList.remove('active');
 
-                // Check if all enemies defeated
+                // Check if this was story combat - continue story progression
+                if (game.lastCombatWasStory) {
+                    onStoryCombatEnd(game.lastCombatVictory);
+                    game.pendingSceneId = undefined;
+                    game.lastCombatWasStory = false;
+                    return;
+                }
+
+                // Check if all exploration enemies defeated
                 if (game.mapEnemies.every(e => !e.alive)) {
                     showDialog(allClearedDialog, switchToExploration);
                 } else {
