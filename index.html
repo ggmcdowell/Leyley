@@ -3715,9 +3715,10 @@
         }
 
         function advanceDialog() {
-            // Prevent advancing if dialog is not active or if choice is being shown
+            // Guard: prevent advancing if dialog not active, choice showing, or already complete
             if (!document.getElementById('dialog-scene').classList.contains('active') ||
-                document.getElementById('choice-container').classList.contains('active')) {
+                document.getElementById('choice-container').classList.contains('active') ||
+                !game.dialogQueue || game.dialogIndex >= game.dialogQueue.length) {
                 return;
             }
 
