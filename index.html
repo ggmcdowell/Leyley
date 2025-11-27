@@ -3708,13 +3708,16 @@
 
             game.currentScene = 'dialog';
             document.getElementById('dialog-scene').classList.add('active');
+            document.getElementById('levelup-overlay').classList.remove('active');
+            document.getElementById('combat-result').style.display = 'none';
             document.getElementById('exploration-scene').style.display = 'none';
             document.getElementById('combat-scene').style.display = 'none';
         }
 
         function advanceDialog() {
-            // Don't advance if choice is active
-            if (document.getElementById('choice-container').classList.contains('active')) {
+            // Prevent advancing if dialog is not active or if choice is being shown
+            if (!document.getElementById('dialog-scene').classList.contains('active') ||
+                document.getElementById('choice-container').classList.contains('active')) {
                 return;
             }
 
@@ -3722,8 +3725,11 @@
 
             if (game.dialogIndex >= game.dialogQueue.length) {
                 document.getElementById('dialog-scene').classList.remove('active');
-                if (game.dialogCallback) {
-                    game.dialogCallback();
+                // Store and clear callback before calling to prevent double-execution
+                const callback = game.dialogCallback;
+                game.dialogCallback = null;
+                if (callback) {
+                    callback();
                 }
                 return;
             }
@@ -3735,6 +3741,8 @@
         function switchToExploration() {
             game.currentScene = 'exploration';
             document.getElementById('dialog-scene').classList.remove('active');
+            document.getElementById('levelup-overlay').classList.remove('active');
+            document.getElementById('combat-result').style.display = 'none';
             document.getElementById('exploration-scene').style.display = 'block';
             document.getElementById('combat-scene').style.display = 'none';
 
@@ -3744,6 +3752,8 @@
 
         function showCombatScene() {
             document.getElementById('dialog-scene').classList.remove('active');
+            document.getElementById('levelup-overlay').classList.remove('active');
+            document.getElementById('combat-result').style.display = 'none';
             document.getElementById('exploration-scene').style.display = 'none';
             document.getElementById('combat-scene').style.display = 'block';
         }
